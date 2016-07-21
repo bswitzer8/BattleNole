@@ -1,4 +1,8 @@
+
+
+
 package bswitzer.android.com.battlenole;
+
 
 /**
  * Created by Ben on 7/7/2016.
