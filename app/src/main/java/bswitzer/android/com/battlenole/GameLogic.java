@@ -19,12 +19,11 @@ package bswitzer.android.com.battlenole;
  */
 public class GameLogic {
 
-    // Ben's ENUM type
-
     public GameLogic() {
 
     }
 
+    // #############################################################################################
     // Check if Ship is Sunk
     public boolean IsShipSunk(ShipM ship, BoardM board) {
 
@@ -41,7 +40,7 @@ public class GameLogic {
         int length = ship.GetShipLength();
 
         // Horizontal Check of ship towards the right --------------------------------------------------------//
-        if (fp.charAt(1) == bp.charAt(1)) {                                                                   //
+        if (fp.charAt(1) == bp.charAt(1)) {   // Example : A2 - C2 < * * * > ship of size 3                   //
             // Front of ship is to left and back towards right  < F * * B >                                   //
             if (FrontOfShipX < BackOfShipX) {                                                                 //
                 for (int i = 0; i < length; ++i) {                                                            //
@@ -98,10 +97,22 @@ public class GameLogic {
                 return true;          // All positions are Red, SHIP IS SUNK!!
             }
         }
-        // *******************************************************************************************************
+        // *****************************************************************************************
 
         // Default case
         return false;
+    }
+    // #############################################################################################
+
+
+    // Two different functions to check if player ships are sunk ...................................
+    public boolean IsGroupOfShipsSunk(ShipM[] ships, BoardM board, int shipTotal) {
+
+        for (int i = 0; i < shipTotal; ++i) {
+            if(!IsShipSunk(ships[i], board))     // If any ship in gruop not sunk yet, return false
+                return false;
+        }
+        return true;                             // All ships sunk
     }
 
     public int HowManyShipsSunk(ShipM[] ship, int shipTotal) {
@@ -116,5 +127,27 @@ public class GameLogic {
         return shipsSunk;
     }
 
+    // .............................................................................................
+
+    // Determine winner
+
+    // 1 indicates player 1 wins, 2 indicates player wins
+    public int WinnerOfGame(ShipM[] player1Ships, ShipM[] player2Ships, Player player1, Player player2, int shipTotal) {
+
+        if (HowManyShipsSunk(player1Ships, shipTotal) == shipTotal) { // Player 2 wins
+            player1.IncrementLostCount();
+            player2.IncrementWinCount();
+            return 2;
+        }
+
+        if (HowManyShipsSunk(player2Ships, shipTotal) == shipTotal) { // Player 2 wins
+            player1.IncrementWinCount();
+            player2.IncrementLostCount();
+            return 1;
+        }
+
+        // no one wins yet if 0
+        return 0;
+    }
 
 }

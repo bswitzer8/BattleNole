@@ -25,19 +25,26 @@ public class BoardM {
         PLAYER
     }
 
-    int size_;                 // used to determine the size of the board
-    private Type[][] board_; // variable to hold the board multi dimensional array, initialize it later.
+    int              size_;         // used to determine the size of the board
+    Player           player_;       // Get plaayer name from this object
+    String           boardPlayer_;  //
+    private Type[][] board_;        // variable to hold the board multi dimensional array, initialize it later.
 
     // Constructor
-    public BoardM(int size) {
+    public BoardM(int size, Player player) {
         // Set Size
         SetSize(size);
         // set Board
         CreateBoard(size);
+        // Set who owns this board player
+        this.boardPlayer_ = player.GetPlayerName();
     }
 
     // Create Board
     public void CreateBoard(int size) {
+        // Horizontal Values: "A" starts at int value of 0    A - J  = 0 - 9
+        // Vertical Values:  "1" starts at in value of 0      1 - 10 = 0 - 9
+
         board_ = new Type[size][size]; // Create the board
         SetBoardBlank();               // Make the board Enum Type Blank.
     }
@@ -70,9 +77,30 @@ public class BoardM {
     }
 
 
-    // Set Board position, return false if player selects position not blank
-    public boolean SetBoardPosition(Type selection, String x, int y) {
+    // Set Board position, return false if player does not hit, return true if ship is hit
+    public boolean SetBoardPosition(String x, int yPos) {
         // Can only set the position if the board piece is blank
+
+        int xPos = ReturnIntFromLetter(x);         // get X position
+
+        Type selection = GetBoard()[xPos][yPos];
+
+        switch (selection) {
+            case BLANK:                // Player selects open seas, miss
+                GetBoard()[xPos][yPos] = Type.WHITE_MISSILE;
+                return false;
+            case WHITE_MISSILE:        // Player selects already selected space
+            case RED_MISSILE:          // Player slects already selected space
+                return false;
+            case PLAYER:               // Player hits ship.
+                GetBoard()[xPos][yPos] = Type.RED_MISSILE;
+                return true;
+            default:
+                break;
+
+        }
+
+        /*
         if (GetBoard()[ReturnIntFromLetter(x)][y] == Type.BLANK) {
             GetBoard()[ReturnIntFromLetter(x)][y] = selection;
             return true;
@@ -80,7 +108,10 @@ public class BoardM {
         else {
             return false;
         }
+        */
+        return false;
     }
+
 
     public boolean CompareBoardPosition(int x, int y, Type t1) {
         if (GetBoard()[x][y] == t1)
@@ -129,7 +160,6 @@ public class BoardM {
                         board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PLAYER;
                         ++FrontOfShipX;
                     }
-
                 }
                 // Front fo ship is on right
                 else {
@@ -210,13 +240,10 @@ public class BoardM {
         return t1;
 
     }
-
+    // For us in multidimensional array, one off
     public int ReturnIntFromString(String x) {
         int num;
         switch (x) {
-            case "0":
-                num = 0;
-                break;
             case "1":
                 num = 0;
                 break;

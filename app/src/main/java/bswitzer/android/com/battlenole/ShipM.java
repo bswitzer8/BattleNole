@@ -5,12 +5,12 @@ package bswitzer.android.com.battlenole;
  */
 public class ShipM {
 
-    private int shipLength_;
-    private String shipName_;
-    private String shipClass_;
-    private String frontPosition_;
-    private String backPosition_;
-    private boolean isAlive_;
+    private int      shipLength_;
+    private String   shipName_;
+    private String   shipClass_;
+    private String   frontPosition_;
+    private String   backPosition_;
+    private boolean  isAlive_;
 
     public ShipM(int length, String name, String sClass, String fp, String bp, boolean alive  ) {
         SetShipLength(length);   // Create the length of the ship object
