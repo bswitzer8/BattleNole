@@ -9,8 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="bswitzer.android.com.battlenole.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+
+    <bswitzer.android.com.battlenole.BoardCanvas
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+
 </RelativeLayout>
