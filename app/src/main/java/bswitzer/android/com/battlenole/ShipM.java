@@ -11,14 +11,16 @@ public class ShipM {
     private String   frontPosition_;
     private String   backPosition_;
     private boolean  isAlive_;
+    String  playerName_;
 
-    public ShipM(int length, String name, String sClass, String fp, String bp, boolean alive  ) {
+    public ShipM(int length, String name, String sClass, String fp, String bp, boolean alive, Player player  ) {
         SetShipLength(length);   // Create the length of the ship object
         SetShipName(name);       // Player can name their ships
         SetShipClass(sClass);    // Ship class can be determined by length
         SetFrontPosition(fp);    // Front of ship position
         SetBackPosition(bp);     // Back of ship position
         SetAlive(alive);         // Determine if ship is alive
+        SetPlayerOfShip(player); // Associate ship to player
     }
 
 
@@ -69,14 +71,12 @@ public class ShipM {
         return isAlive_;
     }
 
-    // Horizontal Check of Ship
+    public void SetPlayerOfShip(Player player) {
+        this.playerName_ = player.GetPlayerName();
+    }
 
-    // Vertical Check of Ship
-
-
-
-
-    // Helper Functions to conver string of player position
-
+    public String GetPlayerOfShip() {
+        return playerName_;
+    }
 
 }

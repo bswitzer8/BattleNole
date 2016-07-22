@@ -16,19 +16,18 @@ package bswitzer.android.com.battlenole;
 
 
 public class BoardM {
-
     // Ben's ENUM type
     public enum Type {
         BLANK,
         WHITE_MISSILE,
         RED_MISSILE,
-        PLAYER
+        ENEMY_PLAYER
     }
 
     int              size_;         // used to determine the size of the board
     Player           player_;       // Get plaayer name from this object
     String           boardPlayer_;  //
-    private Type[][] board_;        // variable to hold the board multi dimensional array, initialize it later.
+    private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
 
     // Constructor
     public BoardM(int size, Player player) {
@@ -78,10 +77,11 @@ public class BoardM {
 
 
     // Set Board position, return false if player does not hit, return true if ship is hit
-    public boolean SetBoardPosition(String x, int yPos) {
-        // Can only set the position if the board piece is blank
+    // Example: SetBoardPosition("A1"); SetBoardPosition("B2");
+    public boolean SetBoardPosition(String position) {
 
-        int xPos = ReturnIntFromLetter(x);         // get X position
+        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
+        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
 
         Type selection = GetBoard()[xPos][yPos];
 
@@ -92,12 +92,11 @@ public class BoardM {
             case WHITE_MISSILE:        // Player selects already selected space
             case RED_MISSILE:          // Player slects already selected space
                 return false;
-            case PLAYER:               // Player hits ship.
+            case ENEMY_PLAYER:               // Player hits ship.
                 GetBoard()[xPos][yPos] = Type.RED_MISSILE;
                 return true;
             default:
                 break;
-
         }
 
         /*
@@ -112,13 +111,21 @@ public class BoardM {
         return false;
     }
 
+    public Type GetBoardPositionValue(String position) {
+        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
+        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
+        Type selection = GetBoard()[xPos][yPos];
+        return selection;
+    }
 
+    /*
     public boolean CompareBoardPosition(int x, int y, Type t1) {
         if (GetBoard()[x][y] == t1)
             return true;
         return false;
     }
-
+    */
+    
     // Get Board Full Status, if all are blank, return true
     public boolean IsBoardFull() {
         for (int i = 0; i < GetSize(); ++i) {
@@ -157,14 +164,14 @@ public class BoardM {
                 // Front of ship is on left
                 if (FrontOfShipX < BackOfShipX) {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PLAYER;
+                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
                         ++FrontOfShipX;
                     }
                 }
                 // Front fo ship is on right
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.PLAYER;
+                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
                         ++BackOfShipX;
                     }
                 }
@@ -176,7 +183,7 @@ public class BoardM {
                 // Front of ship is at top and back towards bottom
                 if (FrontOfShipY < BackOfShipY ){
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PLAYER;
+                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
                         ++FrontOfShipY;
                     }
 
@@ -184,7 +191,7 @@ public class BoardM {
                 // Front of ship is at bottom and back at top
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.PLAYER;
+                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
                         ++BackOfShipY;
                     }
                 }
@@ -241,9 +248,9 @@ public class BoardM {
 
     }
     // For us in multidimensional array, one off
-    public int ReturnIntFromString(String x) {
+    public int ReturnIntFromString(String yVal) {
         int num;
-        switch (x) {
+        switch (yVal) {
             case "1":
                 num = 0;
                 break;

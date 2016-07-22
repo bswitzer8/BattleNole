@@ -115,15 +115,24 @@ public class GameLogic {
         return true;                             // All ships sunk
     }
 
-    public int HowManyShipsSunk(ShipM[] ship, int shipTotal) {
+    public int HowManyShipsSunk(ShipM[] ship, BoardM board, int shipTotal) {
 
         int shipsSunk = 0;
 
         for (int i = 0; i < shipTotal; ++i) {
+
+            // If ship is alive still, check if it is dead
+            if (ship[i].GetAlive()) {
+                IsShipSunk(ship[i], board);
+            }
+
+            // Update Ship sunk count
             if (!ship[i].GetAlive()) {          // if ship is dead increment counter
                 ++shipsSunk;
             }
         }
+
+        // Return how many ships sunk
         return shipsSunk;
     }
 
@@ -132,15 +141,20 @@ public class GameLogic {
     // Determine winner
 
     // 1 indicates player 1 wins, 2 indicates player wins
-    public int WinnerOfGame(ShipM[] player1Ships, ShipM[] player2Ships, Player player1, Player player2, int shipTotal) {
+    public int WinnerOfGame(ShipM[] player1Ships,
+                            ShipM[] player2Ships,
+                            Player player1,
+                            Player player2,
+                            int shipTotal,
+                            BoardM board) {
 
-        if (HowManyShipsSunk(player1Ships, shipTotal) == shipTotal) { // Player 2 wins
+        if (HowManyShipsSunk(player1Ships, board, shipTotal) == shipTotal) { // Player 2 wins
             player1.IncrementLostCount();
             player2.IncrementWinCount();
             return 2;
         }
 
-        if (HowManyShipsSunk(player2Ships, shipTotal) == shipTotal) { // Player 2 wins
+        if (HowManyShipsSunk(player2Ships, board, shipTotal) == shipTotal) { // Player 2 wins
             player1.IncrementWinCount();
             player2.IncrementLostCount();
             return 1;
