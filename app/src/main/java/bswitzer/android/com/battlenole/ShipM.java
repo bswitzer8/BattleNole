@@ -10,15 +10,15 @@ public class ShipM {
     private String shipClass_;
     private String frontPosition_;
     private String backPosition_;
+    private boolean isAlive_;
 
-
-
-    public ShipM(int length, String name, String sClass, String fp, String bp ) {
-        SetShipLength(length);
-        SetShipName(name);
-        SetShipClass(sClass);
-        SetFrontPosition(fp);
-        SetBackPosition(bp);
+    public ShipM(int length, String name, String sClass, String fp, String bp, boolean alive  ) {
+        SetShipLength(length);   // Create the length of the ship object
+        SetShipName(name);       // Player can name their ships
+        SetShipClass(sClass);    // Ship class can be determined by length
+        SetFrontPosition(fp);    // Front of ship position
+        SetBackPosition(bp);     // Back of ship position
+        SetAlive(alive);         // Determine if ship is alive
     }
 
 
@@ -61,6 +61,22 @@ public class ShipM {
     public String GetBackPosition() {
         return backPosition_;
     }
+
+    public void SetAlive(boolean status) {
+        this.isAlive_ = status;
+    }
+    public boolean GetAlive() {
+        return isAlive_;
+    }
+
+    // Horizontal Check of Ship
+
+    // Vertical Check of Ship
+
+
+
+
+    // Helper Functions to conver string of player position
 
 
 }
