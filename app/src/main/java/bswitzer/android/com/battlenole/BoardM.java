@@ -14,7 +14,6 @@ package bswitzer.android.com.battlenole;
 
  */
 
-
 public class BoardM {
     // Ben's ENUM type
     public enum Type {
@@ -118,14 +117,14 @@ public class BoardM {
         return selection;
     }
 
-    /*
+
     public boolean CompareBoardPosition(int x, int y, Type t1) {
         if (GetBoard()[x][y] == t1)
             return true;
         return false;
     }
-    */
     
+
     // Get Board Full Status, if all are blank, return true
     public boolean IsBoardFull() {
         for (int i = 0; i < GetSize(); ++i) {
