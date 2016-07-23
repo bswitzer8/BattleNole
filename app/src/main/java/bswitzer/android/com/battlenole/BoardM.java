@@ -24,6 +24,7 @@ public class BoardM {
     }
 
     int              size_;         // used to determine the size of the board
+    int              turn_;
     String           boardPlayer_;  //
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
 
@@ -33,6 +34,9 @@ public class BoardM {
         SetSize(size);
         // set Board
         CreateBoard(size);
+        // Set Turn
+        SetTurn(0); // initial value
+
         // Set who owns this board player
         this.boardPlayer_ = player.GetPlayerName();
     }
@@ -55,6 +59,33 @@ public class BoardM {
         this.size_ = size;
     }
     // ***************************************************/
+
+    // TURN ------------------------------------------------
+    // Just need to compare if the move is valid before using turn, can be done
+    // in main, or it can be done here, but I think it's simpler to keep like this. 
+    public int GetTurn() {
+        return turn_;
+    }
+
+    public void SetTurn(int turn) {
+        this.turn_ = turn;
+    }
+
+    public void IncrementTurn() {
+        turn_++;
+    }
+
+    public void DecrementTurn() {
+        turn_--;
+    }
+
+    public void ResetTurn() {
+        turn_ = 0;
+    }
+
+    // ---------------------------------------------------
+
+
 
 
     // BOARD **********************************************
@@ -133,6 +164,13 @@ public class BoardM {
             }
         }
         return true;
+    }
+
+    public boolean IsBoardFullCount() {
+        if (GetTurn() == 99) // I think 99 is 100, since count starts at 0??
+            return true;
+        else
+            return false;
     }
 
     // Set Ship tile positions. Takes an array of ships and applies their positions on the board
