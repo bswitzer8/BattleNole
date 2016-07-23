@@ -62,7 +62,7 @@ public class BoardM {
 
     // TURN ------------------------------------------------
     // Just need to compare if the move is valid before using turn, can be done
-    // in main, or it can be done here, but I think it's simpler to keep like this. 
+    // in main, or it can be done here, but I think it's simpler to keep like this.
     public int GetTurn() {
         return turn_;
     }
@@ -116,12 +116,14 @@ public class BoardM {
 
         switch (selection) {
             case BLANK:                // Player selects open seas, miss
+                IncrementTurn();       // Increment player turn
                 GetBoard()[xPos][yPos] = Type.WHITE_MISSILE;
                 return false;
             case WHITE_MISSILE:        // Player selects already selected space
             case RED_MISSILE:          // Player slects already selected space
                 return false;
             case ENEMY_PLAYER:               // Player hits ship.
+                IncrementTurn();       // Increment player turn
                 GetBoard()[xPos][yPos] = Type.RED_MISSILE;
                 return true;
             default:
