@@ -27,7 +27,7 @@ public class Player {
 
 
     void IncrementWinCount() {
-        this.gamesWon_++;
+        gamesWon_++;
     }
 
     int GetWinCount(){
@@ -35,11 +35,16 @@ public class Player {
     }
 
     void IncrementLostCount() {
-        this.gamesLost_++;
+        gamesLost_++;
     }
 
     int GetLostCount(){
         return gamesLost_;
+    }
+
+    void ResetCount() {
+        gamesWon_ = 0;
+        gamesLost_ = 0;
     }
 
 }

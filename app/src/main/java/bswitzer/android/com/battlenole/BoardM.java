@@ -24,7 +24,6 @@ public class BoardM {
     }
 
     int              size_;         // used to determine the size of the board
-    Player           player_;       // Get plaayer name from this object
     String           boardPlayer_;  //
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
 
@@ -123,7 +122,7 @@ public class BoardM {
             return true;
         return false;
     }
-    
+
 
     // Get Board Full Status, if all are blank, return true
     public boolean IsBoardFull() {
