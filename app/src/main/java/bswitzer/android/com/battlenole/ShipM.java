@@ -5,20 +5,20 @@ package bswitzer.android.com.battlenole;
  */
 public class ShipM {
 
-    private int shipLength_;
-    private String shipName_;
-    private String shipClass_;
-    private String frontPosition_;
-    private String backPosition_;
+    private int      shipLength_;
+    private String   shipName_;
+    private String   shipClass_;
+    private String   frontPosition_;
+    private String   backPosition_;
+    private boolean  isAlive_;
+    private String   playerName_;
 
-
-
-    public ShipM(int length, String name, String sClass, String fp, String bp ) {
-        SetShipLength(length);
-        SetShipName(name);
-        SetShipClass(sClass);
-        SetFrontPosition(fp);
-        SetBackPosition(bp);
+    public ShipM(int length, String name, String sClass, boolean alive, Player player  ) {
+        SetShipLength(length);   // Create the length of the ship object
+        SetShipName(name);       // Player can name their ships
+        SetShipClass(sClass);    // Ship class can be determined by length
+        SetAlive(alive);         // Determine if ship is alive
+        SetPlayerOfShip(player); // Associate ship to player
     }
 
 
@@ -62,5 +62,19 @@ public class ShipM {
         return backPosition_;
     }
 
+    public void SetAlive(boolean status) {
+        this.isAlive_ = status;
+    }
+    public boolean GetAlive() {
+        return isAlive_;
+    }
+
+    public void SetPlayerOfShip(Player player) {
+        this.playerName_ = player.GetPlayerName();
+    }
+
+    public String GetPlayerOfShip() {
+        return playerName_;
+    }
 
 }
