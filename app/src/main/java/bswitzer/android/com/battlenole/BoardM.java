@@ -25,6 +25,7 @@ public class BoardM {
 
     int              size_;         // used to determine the size of the board
     int              turn_;
+    int              maxTurns_;     // maximum amount of turns
     String           boardPlayer_;  //
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
 
@@ -36,7 +37,8 @@ public class BoardM {
         CreateBoard(size);
         // Set Turn
         SetTurn(0); // initial value
-
+        // Set Max Turns
+        SetMaxTurns(size);
         // Set who owns this board player
         this.boardPlayer_ = player.GetPlayerName();
     }
@@ -85,7 +87,13 @@ public class BoardM {
 
     // ---------------------------------------------------
 
+    public void SetMaxTurns(int size) {
+        this.maxTurns_ = size * size;
+    }
 
+    public int GetMaxTurns() {
+        return maxTurns_;
+    }
 
 
     // BOARD **********************************************
@@ -168,15 +176,16 @@ public class BoardM {
         return true;
     }
 
+    // No more moves .... most likely will never be reached as most games end before max
     public boolean IsBoardFullCount() {
-        if (GetTurn() == 99) // I think 99 is 100, since count starts at 0??
+        if (GetTurn() == (GetMaxTurns() - 1)) // I think 99 is 100, since count starts at 0??
             return true;
         else
             return false;
     }
 
     // Set Ship tile positions. Takes an array of ships and applies their positions on the board
-    public void SetShipBoardTile(ShipM[] ship, int shipCount, BoardM board) {
+    public void SetShipBoardTile(ShipM[] ship, int shipCount) {
 
         String fp;
         String bp;
@@ -191,10 +200,10 @@ public class BoardM {
             shipLength = ship[i].GetShipLength();
             fp = ship[i].GetFrontPosition();
             bp = ship[i].GetBackPosition();
-            FrontOfShipX = board.ReturnIntFromLetter(Character.toString(fp.charAt(0)));
-            FrontOfShipY = board.ReturnIntFromString(Character.toString(fp.charAt(1)));
-            BackOfShipX = board.ReturnIntFromLetter(Character.toString(bp.charAt(0)));
-            BackOfShipY = board.ReturnIntFromString(Character.toString(bp.charAt(1)));
+            FrontOfShipX = ReturnIntFromLetter(Character.toString(fp.charAt(0)));
+            FrontOfShipY = ReturnIntFromString(Character.toString(fp.charAt(1)));
+            BackOfShipX = ReturnIntFromLetter(Character.toString(bp.charAt(0)));
+            BackOfShipY = ReturnIntFromString(Character.toString(bp.charAt(1)));
 
             // Horizontal Set ----------------------------------------------------------------------
             // Example A2 - C2, ship of size 3
@@ -202,14 +211,14 @@ public class BoardM {
                 // Front of ship is on left
                 if (FrontOfShipX < BackOfShipX) {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
+                        GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
                         ++FrontOfShipX;
                     }
                 }
                 // Front fo ship is on right
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
+                        GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
                         ++BackOfShipX;
                     }
                 }
@@ -221,7 +230,7 @@ public class BoardM {
                 // Front of ship is at top and back towards bottom
                 if (FrontOfShipY < BackOfShipY ){
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
+                        GetBoard()[FrontOfShipX][FrontOfShipY] = Type.ENEMY_PLAYER;
                         ++FrontOfShipY;
                     }
 
@@ -229,7 +238,7 @@ public class BoardM {
                 // Front of ship is at bottom and back at top
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        board.GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
+                        GetBoard()[BackOfShipX][BackOfShipY] = Type.ENEMY_PLAYER;
                         ++BackOfShipY;
                     }
                 }
