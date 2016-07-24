@@ -39,67 +39,69 @@ public class GameLogic {
 
         int length = ship.GetShipLength();
 
-        // Horizontal Check of ship towards the right --------------------------------------------------------//
-        if (fp.charAt(1) == bp.charAt(1)) {   // Example : A2 - C2 < * * * > ship of size 3                   //
-            // Front of ship is to left and back towards right  < F * * B >                                   //
-            if (FrontOfShipX < BackOfShipX) {                                                                 //
-                for (int i = 0; i < length; ++i) {                                                            //
-                    // Letter | Number | TYPE . Check the position if it compares                             //
-                    if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {   //
-                        return false; // it is not sunk yet.                                                  //
-                    }                                                                                         //
-                    // increment to the right to check rest of ship                                           //
-                    ++FrontOfShipX;                                                                           //
-                }                                                                                             //
-                ship.SetAlive(false); // Set ship to false indicating dead                                    //
-                return true;          // all positions are Red, SHIP is SUNK!                                 //
-            }                                                                                                 //
-            // Front of ship is right and back towards left  < B * * F >                                      //
-            else {                                                                                            //
-                for (int i = 0; i < length; ++i ) {                                                           //
-                    if (!board.CompareBoardPosition(BackOfShipX, BackOfShipY, BoardM.Type.RED_MISSILE)) {     //
-                        return false; // not sunk yet                                                         //
-                    }                                                                                         //
-                    ++BackOfShipX;                                                                            //
-                }                                                                                             //
-                ship.SetAlive(false); // Set ship to false indicating dead                                    //
-                return true;          // all positions are Red, SHIP is SUNK!                                 //
-            }                                                                                                 //
-        }                                                                                                     //
-        // ---------------------------------------------------------------------------------------------------//
+        // Check if ship is still alive, if it isn't return false no need to further check
+        if (ship.GetAlive()) {
+            // Horizontal Check of ship towards the right --------------------------------------------------------//
+            if (fp.charAt(1) == bp.charAt(1)) {   // Example : A2 - C2 < * * * > ship of size 3                   //
+                // Front of ship is to left and back towards right  < F * * B >                                   //
+                if (FrontOfShipX < BackOfShipX) {                                                                 //
+                    for (int i = 0; i < length; ++i) {                                                            //
+                        // Letter | Number | TYPE . Check the position if it compares                             //
+                        if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {   //
+                            return false; // it is not sunk yet.                                                  //
+                        }                                                                                         //
+                        // increment to the right to check rest of ship                                           //
+                        ++FrontOfShipX;                                                                           //
+                    }                                                                                             //
+                    ship.SetAlive(false); // Set ship to false indicating dead                                    //
+                    return true;          // all positions are Red, SHIP is SUNK!                                 //
+                }                                                                                                 //
+                // Front of ship is right and back towards left  < B * * F >                                      //
+                else {                                                                                            //
+                    for (int i = 0; i < length; ++i) {                                                           //
+                        if (!board.CompareBoardPosition(BackOfShipX, BackOfShipY, BoardM.Type.RED_MISSILE)) {     //
+                            return false; // not sunk yet                                                         //
+                        }                                                                                         //
+                        ++BackOfShipX;                                                                            //
+                    }                                                                                             //
+                    ship.SetAlive(false); // Set ship to false indicating dead                                    //
+                    return true;          // all positions are Red, SHIP is SUNK!                                 //
+                }                                                                                                 //
+            }                                                                                                     //
+            // ---------------------------------------------------------------------------------------------------//
 
-        // Example: Ship at D2 - D5 size 3
-        // Vertical Check of Ship towards the bottom ************************************************************
-        if (fp.charAt(0) == bp.charAt(0)) {
-            // Front of ship is at top and back towards bottom
-            if (FrontOfShipY < BackOfShipY) {
-                for (int j = 0; j < length; ++j) {
-                    // Go through tiles and check if it is hit
-                    if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {
-                        return false;
+            // Example: Ship at D2 - D5 size 3
+            // Vertical Check of Ship towards the bottom ************************************************************
+            if (fp.charAt(0) == bp.charAt(0)) {
+                // Front of ship is at top and back towards bottom
+                if (FrontOfShipY < BackOfShipY) {
+                    for (int j = 0; j < length; ++j) {
+                        // Go through tiles and check if it is hit
+                        if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {
+                            return false;
+                        }
+                        // increment ship check to bottom of grid, check rest of ship
+                        ++FrontOfShipY;
                     }
-                    // increment ship check to bottom of grid, check rest of ship
-                    ++FrontOfShipY;
-                }
 
-                ship.SetAlive(false); // set ship to false indicating
-                return true;          // All positions are Red, Ship is SUNK
-            }
-            // Front of ship at bottom and back at top
-            else{
-                for (int i = 0; i < length; ++i) {
-                    if (!board.CompareBoardPosition(BackOfShipX, BackOfShipY, BoardM.Type.RED_MISSILE)) {
-                        return false; // not sunk yet
-                    }
-                    ++BackOfShipY;
+                    ship.SetAlive(false); // set ship to false indicating
+                    return true;          // All positions are Red, Ship is SUNK
                 }
-                ship.SetAlive(false); // Set ship to false indicating it is sunk
-                return true;          // All positions are Red, SHIP IS SUNK!!
+                // Front of ship at bottom and back at top
+                else {
+                    for (int i = 0; i < length; ++i) {
+                        if (!board.CompareBoardPosition(BackOfShipX, BackOfShipY, BoardM.Type.RED_MISSILE)) {
+                            return false; // not sunk yet
+                        }
+                        ++BackOfShipY;
+                    }
+                    ship.SetAlive(false); // Set ship to false indicating it is sunk
+                    return true;          // All positions are Red, SHIP IS SUNK!!
+                }
             }
+            // *****************************************************************************************
         }
-        // *****************************************************************************************
-
-        // Default case
+        // Default case, ship is dead
         return false;
     }
     // #############################################################################################
@@ -121,10 +123,12 @@ public class GameLogic {
 
         for (int i = 0; i < shipTotal; ++i) {
 
+
             // If ship is alive still, check if it is dead
             if (ship[i].GetAlive()) {
                 IsShipSunk(ship[i], board);
             }
+
 
             // Update Ship sunk count
             if (!ship[i].GetAlive()) {          // if ship is dead increment counter
@@ -146,15 +150,16 @@ public class GameLogic {
                             Player player1,
                             Player player2,
                             int shipTotal,
-                            BoardM board) {
+                            BoardM board1,
+                            BoardM board2) {
 
-        if (HowManyShipsSunk(player1Ships, board, shipTotal) == shipTotal) { // Player 2 wins
+        if (HowManyShipsSunk(player1Ships, board1, shipTotal) == shipTotal) { // Player 2 wins
             player1.IncrementLostCount();
             player2.IncrementWinCount();
             return 2;
         }
 
-        if (HowManyShipsSunk(player2Ships, board, shipTotal) == shipTotal) { // Player 2 wins
+        if (HowManyShipsSunk(player2Ships, board2, shipTotal) == shipTotal) { // Player 2 wins
             player1.IncrementWinCount();
             player2.IncrementLostCount();
             return 1;

@@ -9,12 +9,18 @@ public class Player {
     int    gamesWon_;
     int    gamesLost_;
 
+    // Empty Constructor
     Player() {
-
+        SetPlayerName("NO NAME!");
+        gamesLost_ = 0;
+        gamesWon_  = 0;
     }
 
+    // Constructor with name
     Player(String name) {
         SetPlayerName(name);
+        gamesLost_ = 0;
+        gamesWon_  = 0;
     }
 
     void SetPlayerName(String name) {
@@ -24,7 +30,6 @@ public class Player {
     String GetPlayerName() {
         return playerName_;
     }
-
 
     void IncrementWinCount() {
         gamesWon_++;
