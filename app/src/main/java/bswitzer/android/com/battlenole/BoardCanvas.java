@@ -109,7 +109,7 @@ public class BoardCanvas extends ImageView {
 
         // missile test!
         for(int k = 1; k < 11; ++k)
-            placeMissile(canvas, k % 2 == 0, k, k, width, gap);
+            placeMissile(canvas, k % 2 == 1, k, k, width, gap);
 
     }
 
