@@ -29,6 +29,7 @@ public class BoardM {
     int              maxTurns_;     // maximum amount of turns
     String           boardPlayer_;  // name of player who owns this board
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
+    private Type[][] boardEnemyDisplay_; // used to display board to enemy
     // ...........................................................................................*/
 
     // Constructor
@@ -50,8 +51,9 @@ public class BoardM {
         // Horizontal Values: "A" starts at int value of 0    A - J  = 0 - 9
         // Vertical Values:  "1" starts at in value of 0      1 - 10 = 0 - 9
 
-        board_ = new Type[size][size]; // Create the board
-        SetBoardBlank();               // Make the board Enum Type Blank.
+        board_ = new Type[size][size];             // Create the board
+        boardEnemyDisplay_ = new Type[size][size]; // Display board to enemy
+        SetBoardBlank();                           // Make the board Enum Type Blank.
     }
 
     // SIZE **********************************************
@@ -110,14 +112,23 @@ public class BoardM {
         return board_;
     }
 
-    // Set as blank, used for Reset too
+    // Get enemy board
+    public Type[][] GetEnemyBoardDisplay() {
+        return boardEnemyDisplay_;
+    }
+
+    // Set as blank for both boards, used for Reset too
     public void SetBoardBlank() {
         for (int i = 0; i < GetSize(); ++i) {
             for (int j = 0; j < GetSize(); ++j) {
                 GetBoard()[i][j] = Type.BLANK;
+                GetEnemyBoardDisplay()[i][j] = Type.BLANK;
             }
         }
     }
+
+    // Display only White or Red on board
+
 
     // Set Board position, return false if player does not hit, return true if ship is hit
     // Example: SetBoardPosition("A1"); SetBoardPosition("B2");
@@ -129,16 +140,18 @@ public class BoardM {
         Type selection = GetBoard()[xPos][yPos];
 
         switch (selection) {
-            case BLANK:                                       // Player selects open seas, miss
-                IncrementTurn();                              // Increment player turn
-                GetBoard()[xPos][yPos] = Type.WHITE_MISSILE;  // Set tile to white missile
+            case BLANK:                                                 // Player selects open seas, miss
+                IncrementTurn();                                        // Increment player turn
+                GetBoard()[xPos][yPos] = Type.WHITE_MISSILE;            // Set tile to white missile
+                GetEnemyBoardDisplay()[xPos][yPos] = Type.WHITE_MISSILE; // Set tile to white missile
                 return false;
-            case WHITE_MISSILE:                               // Player selects already selected space
-            case RED_MISSILE:                                 // Player selects already selected space
+            case WHITE_MISSILE:                                         // Player selects already selected space
+            case RED_MISSILE:                                           // Player selects already selected space
                 return false;
-            case PLAYER:                                      // Enemy Player hits this.player's ship.
-                IncrementTurn();                              // Increment player turn
-                GetBoard()[xPos][yPos] = Type.RED_MISSILE;    // set Tile to red missile
+            case PLAYER:                                                // Enemy Player hits this.player's ship.
+                IncrementTurn();                                        // Increment player turn
+                GetBoard()[xPos][yPos] = Type.RED_MISSILE;              // set Tile to red missile
+                GetEnemyBoardDisplay()[xPos][yPos] = Type.RED_MISSILE;  // set to Red Missile
                 return true;
             default:
                 break;

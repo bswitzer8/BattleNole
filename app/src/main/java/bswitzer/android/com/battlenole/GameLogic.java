@@ -50,7 +50,7 @@ public class GameLogic {
                         if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {   //
                             return false; // it is not sunk yet.                                                  //
                         }                                                                                         //
-                        // increment to the right to check rest of ship                                           //
+                        // increment to the right to check rest of ship while the check is red                    //
                         ++FrontOfShipX;                                                                           //
                     }                                                                                             //
                     ship.SetAlive(false); // Set ship to false indicating dead                                    //
@@ -111,7 +111,7 @@ public class GameLogic {
     public boolean IsGroupOfShipsSunk(ShipM[] ships, BoardM board, int shipTotal) {
 
         for (int i = 0; i < shipTotal; ++i) {
-            if(!IsShipSunk(ships[i], board))     // If any ship in gruop not sunk yet, return false
+            if (!IsShipSunk(ships[i], board))     // If any ship in gruop not sunk yet, return false
                 return false;
         }
         return true;                             // All ships sunk
@@ -122,13 +122,11 @@ public class GameLogic {
         int shipsSunk = 0;
 
         for (int i = 0; i < shipTotal; ++i) {
-
-
             // If ship is alive still, check if it is dead
             if (ship[i].GetAlive()) {
                 IsShipSunk(ship[i], board);
             }
-
+            // need separate if statements to check first if a ship is dead, might be...
 
             // Update Ship sunk count
             if (!ship[i].GetAlive()) {          // if ship is dead increment counter
@@ -168,5 +166,14 @@ public class GameLogic {
         // no one wins yet if 0
         return 0;
     }
+
+
+    public String DisplayPlayerStats(Player player) {
+        String output = "";
+        output = player.GetPlayerName() + " Wins: " + Integer.toString(player.gamesWon_);
+        output += "Losses: " + Integer.toString(player.gamesLost_);
+        return output;
+    }
+
 
 }

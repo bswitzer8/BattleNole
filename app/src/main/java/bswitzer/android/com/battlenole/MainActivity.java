@@ -48,18 +48,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Create ships here
         // Player 1
-        shipsPlayer1[0] = new ShipM(2, "USS Teddy",   "Boat",       true, player1);
-        shipsPlayer1[1] = new ShipM(3, "USS Anthony", "Sub",        true, player1);
-        shipsPlayer1[2] = new ShipM(4, "USS Bill",    "Destroyer",  true, player1);
-        shipsPlayer1[3] = new ShipM(5, "USS Don",     "BattleShip", true, player1);
-        shipsPlayer1[4] = new ShipM(6, "USS Hillary", "Carrier",    true, player1);
+        shipsPlayer1[0] = new ShipM(2, "USS Teddy",   ShipM.ShipType.PATROAL,       true, player1);
+        shipsPlayer1[1] = new ShipM(3, "USS Anthony", ShipM.ShipType.SUB,        true, player1);
+        shipsPlayer1[2] = new ShipM(3, "USS Bill",    ShipM.ShipType.DESTROYER,  true, player1);
+        shipsPlayer1[3] = new ShipM(4, "USS Don",     ShipM.ShipType.BATTLESHIP, true, player1);
+        shipsPlayer1[4] = new ShipM(5, "USS Hillary", ShipM.ShipType.CARRIER,    true, player1);
 
         // Player 2
-        shipsPlayer2[0] = new ShipM(2, "RSS Rummy", "Boat",       true, player2);
-        shipsPlayer2[1] = new ShipM(3, "RSS Aris",  "Sub",        true, player2);
-        shipsPlayer2[2] = new ShipM(4, "RSS Hun",   "Destroyer",  true, player2);
-        shipsPlayer2[3] = new ShipM(5, "RSS Dee",   "BattleShip", true, player2);
-        shipsPlayer2[4] = new ShipM(6, "RSS Yorry", "Carrier",    true, player2);
+        shipsPlayer2[0] = new ShipM(2, "RSS Rummy", ShipM.ShipType.PATROAL,       true, player2);
+        shipsPlayer2[1] = new ShipM(3, "RSS Aris",  ShipM.ShipType.SUB,        true, player2);
+        shipsPlayer2[2] = new ShipM(3, "RSS Hun",   ShipM.ShipType.DESTROYER,  true, player2);
+        shipsPlayer2[3] = new ShipM(4, "RSS Dee",   ShipM.ShipType.BATTLESHIP, true, player2);
+        shipsPlayer2[4] = new ShipM(5, "RSS Yorry", ShipM.ShipType.CARRIER,    true, player2);
 
 
 
