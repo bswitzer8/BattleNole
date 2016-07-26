@@ -98,9 +98,7 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
         int halfSize = width/2;
         int gapSize = gap/2;
 
-        if(c != null)
-            c.drawPoint(gapSize + (i * halfSize), 455 + gapSize + (j * halfSize), paint);
-
+       // c.drawPoint(gapSize + (i * halfSize), 455 + gapSize + (j * halfSize), paint);
 
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(10);

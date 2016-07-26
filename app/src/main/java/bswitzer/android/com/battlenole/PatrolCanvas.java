@@ -18,7 +18,10 @@ public class PatrolCanvas extends BoatCanvas{
         boatLength = 2;
 
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.patrol);
-        boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * (tileLength), false);
+        boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
+
+        this.setX(20f);
+        this.setY(-10f);
     }
 
     protected void onDraw(Canvas canvas) {
