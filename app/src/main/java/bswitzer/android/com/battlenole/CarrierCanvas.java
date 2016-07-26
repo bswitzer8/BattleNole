@@ -17,7 +17,10 @@ public class CarrierCanvas extends BoatCanvas {
         boatLength = 5;
 
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.carrier);
-        boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * (tileLength), false);
+        boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
+
+        this.setX(200f);
+        this.setY(-170f);
     }
 
     protected void onDraw(Canvas canvas) {

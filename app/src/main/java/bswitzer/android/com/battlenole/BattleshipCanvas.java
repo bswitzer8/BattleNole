@@ -18,6 +18,9 @@ public class BattleshipCanvas extends BoatCanvas {
 
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.battleship);
         boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
+
+        this.setX(-130f);
+        this.setY(-130f);
     }
 
     protected void onDraw(Canvas canvas) {
