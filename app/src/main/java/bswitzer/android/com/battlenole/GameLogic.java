@@ -23,6 +23,42 @@ public class GameLogic {
 
     }
 
+
+    public int HowManyShipsSunk(ShipM[] ships) {
+
+        int counter = 0;
+
+        // Get the amount of ships that are sunk
+        for (int i = 0; i < 5; ++i) {
+            if(!ships[i].GetAlive())
+                ++counter;
+        }
+        return counter;
+    }
+
+    public int HowManyShipsAlive(ShipM[] ships) {
+
+        int counter = 0;
+
+        // get the amount of ships that are alive
+        for (int ben = 0; ben < 5; ++ben) {
+            if (ships[ben].GetAlive()) {
+                ++counter;
+            }
+        }
+        return counter;
+    }
+
+    public String DisplayPlayerStats(Player player) {
+        String output = "";
+        output = player.GetPlayerName() + " Wins: " + Integer.toString(player.gamesWon_);
+        output += "Losses: " + Integer.toString(player.gamesLost_);
+        return output;
+    }
+
+    /*
+
+
     // #############################################################################################
     // Check if Ship is Sunk
     public boolean IsShipSunk(ShipM ship, BoardM board) {
@@ -166,14 +202,9 @@ public class GameLogic {
         // no one wins yet if 0
         return 0;
     }
+*/
 
 
-    public String DisplayPlayerStats(Player player) {
-        String output = "";
-        output = player.GetPlayerName() + " Wins: " + Integer.toString(player.gamesWon_);
-        output += "Losses: " + Integer.toString(player.gamesLost_);
-        return output;
-    }
 
 
 }
