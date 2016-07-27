@@ -19,34 +19,48 @@ package bswitzer.android.com.battlenole;
  */
 public class GameLogic {
 
-    public int userMoves;
+    public int userMoves_;
+    public int maxMoves_;
 
-    public GameLogic(int i) {
-        SetUserMoves(i);
+    public GameLogic(int userMoves, int maxMoves) {
+        SetUserMoves(userMoves);
+        SetMaxMoves(maxMoves);
     }
 
     public void SetUserMoves(int i) {
-        this.userMoves = i;
+        this.userMoves_ = i;
     }
 
     public int GetUserMoves() {
-        return userMoves;
+        return userMoves_;
+    }
+
+    public void SetMaxMoves(int i) {
+        this.maxMoves_ = i;
+    }
+
+    public int GetMaxMoves(){
+        return maxMoves_;
+    }
+
+
+    public void IncrementUserMoves() {
+        userMoves_++;
     }
 
     // Use this in combination of set moves to create Salvo version.
     // return true if all moves are used, false if less are used.
     public boolean UserMove(String move, BoardM board, ShipM[] ships) {
 
-        int i = 0;
-
-        for ( ; i < GetUserMoves(); ++i) {
+        if (GetUserMoves() < GetMaxMoves()) {
             board.SetBoardPosition(move, ships);
-        }
-
-        if (i == GetUserMoves())
+            IncrementUserMoves();
             return true;
-        else
+        }
+        else {
+            SetUserMoves(0);                        // reset user moves to 0
             return false;
+        }
     }
 
     public int HowManyShipsSunk(ShipM[] ships) {
