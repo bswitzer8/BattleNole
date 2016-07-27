@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Initialize the network client
+    private NetworkClient client = new NetworkClient(this);
+
     // boardSize
     private static final int boardSize = 10;
     private static final int shipCount = 5;
@@ -42,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        client.start();
+
+        client.sendMove("Test");
 
         //    2,   3,         4,          5,       6
         // Boat, Sub, Destroyer, BattleShip, Carrier
