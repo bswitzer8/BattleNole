@@ -206,6 +206,7 @@ public class BoardM {
         }
     }
 
+    // Set tile to appropriate enum value on board.
     public void SetTileOfBoard(ShipM ship, int FrontOfShipX, int FrontOfShipY) {
         Type shipType = ship.GetShipClass();
         switch(shipType) {
@@ -230,8 +231,8 @@ public class BoardM {
 
     }
 
-    // Set Board position, return false if player does not hit, return true if ship is hit
-    // Example: SetBoardPosition("A1"); SetBoardPosition("B2");
+    // Set Board position of user selection, return false if player does not hit, return true if ship is hit
+    // Example: SetBoardPosition("A1", player1ships); SetBoardPosition("B2", player2ships);
     // Used for game play action
     public boolean SetBoardPosition(String position, ShipM[] ships) {
 
@@ -249,7 +250,7 @@ public class BoardM {
             case RED_MISSILE:                                           // Player selects already selected space
                 return false;
 
-            // Increase ship count hits here, assuming only one ship is called each tmie
+            // Increase ship count hits, turns, and set tile to red missile
             case PATROL:
                 UpdateShipTileInfo(ships[0], xPos, yPos);
                 return true;
@@ -268,80 +269,18 @@ public class BoardM {
             default:
                 break;
         }
-        return false;
+
+        return false; // some random tile not set is selected, should not happen
     }
 
     public void UpdateShipTileInfo(ShipM ship, int xPos, int yPos) {
         if (ship.GetAlive())                                    // only update if alive
             ship.IncrementShipHits();                           // increase the ship count hits
         ship.SetShipAliveStatus();                              // Check if ship is dead
-        IncrementTurn();                                        // Increment player turn
+        IncrementTurn();                                        // Increment board turn
         SetBoardByTypePos(xPos, yPos, Type.RED_MISSILE);        // set Tile To red missile
         SetBoardEnemyByTypePos(xPos, yPos, Type.RED_MISSILE);   // set to red missile
     }
-
-    /*/ Ship functions *************************************
-    public void SetShipsToZeroCount() {
-        patrolCount = 0;
-        subCount = 0;
-        destroyerCount = 0;
-        battleshipCount = 0;
-        carrierCount = 0;
-    }
-
-
-
-    public boolean IsPatrolSunk() {
-        if(patrolCount == 2)
-            return true;
-        return false;
-    }
-    public boolean IsSubSunk() {
-        if (subCount == 3)
-            return true;
-        return false;
-    }
-    public boolean IsDestroyerSunk() {
-        if (destroyerCount == 3)
-            return true;
-        return false;
-    }
-    public boolean IsBattleShipSunk() {
-        if (battleshipCount == 4)
-            return  true;
-        return false;
-    }
-    public boolean IsCarrierSunk() {
-        if (carrierCount == 5)
-            return true;
-        return false;
-    }
-
-
-    public void IncreaseShipCountHit(Type shipType) {
-
-        switch (shipType) {
-            case PATROL:
-                ++patrolCount;
-                break;
-            case SUB:
-                ++subCount;
-                break;
-            case DESTROYER:
-                ++destroyerCount;
-                break;
-            case BATTLESHIP:
-                ++battleshipCount;
-                break;
-            case CARRIER:
-                ++carrierCount;
-                break;
-            default:
-                break;
-        }
-    }
-
-    */
 
     public Type GetBoardPositionValue(String position) {
         int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position

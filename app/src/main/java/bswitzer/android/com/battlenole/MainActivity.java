@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int shipCount = 5;
 
     // Create Game Logic ---------------------
-    GameLogic gameLogic = new GameLogic();
+    GameLogic gameLogic = new GameLogic(1);    // set user moves to 1, can create Salvo Version
 
     // ---------------------------------------
 
