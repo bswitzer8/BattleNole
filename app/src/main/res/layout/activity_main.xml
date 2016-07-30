@@ -34,9 +34,6 @@
         android:rotation="90"
         android:src="@drawable/battleship"
         android:id="@+id/battleship"
-        android:layout_alignTop="@+id/patrol"
-        android:layout_alignLeft="@+id/patrol"
-        android:layout_alignStart="@+id/patrol"
         android:layout_marginTop="53dp"
         android:layout_marginLeft="90dp"
         android:layout_gravity="center_horizontal|bottom" />
@@ -48,11 +45,7 @@
         android:rotation="90"
         android:src="@drawable/carrier"
         android:id="@+id/carrier"
-
-        android:layout_toRightOf="@+id/patrol"
-        android:layout_toEndOf="@+id/patrol"
         android:layout_gravity="top|center|right"
-
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp" />
 
@@ -63,8 +56,7 @@
         android:src="@drawable/submarine"
         android:id="@+id/submarine"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/battleship"
-        android:layout_toEndOf="@+id/battleship" />
+  />
 
     <bswitzer.android.com.battlenole.CruiserCanvas
         android:layout_width="wrap_content"
@@ -72,9 +64,6 @@
         android:rotation="90"
         android:src="@drawable/cruiser"
         android:id="@+id/cruiser"
-        android:layout_below="@+id/patrol"
-        android:layout_alignLeft="@+id/battleship"
-        android:layout_alignStart="@+id/battleship"
         android:layout_marginLeft="140dp"/>
 
 

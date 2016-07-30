@@ -2,9 +2,12 @@ package bswitzer.android.com.battlenole;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     // boardSize
     private static final int boardSize = 10;
     private static final int shipCount = 5;
+
+    private ArrayList<String> al = new ArrayList<String>();
 
     // Create Game Logic ---------------------
     GameLogic gameLogic = new GameLogic();
@@ -73,19 +78,40 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(bc.valid() && cc.valid() && cr.valid() && pc.valid() && sc.valid())
-                {
+
+                // IS THIS VALID? (meaning all the coordinates are proper.
+                boolean valid = bc.valid() && cc.valid() && cr.valid() && pc.valid() && sc.valid();
+
+                // check for overlapping ( if it's valid, otherwise don't bother)
+                boolean determine = valid && AppendCoord(bc) && AppendCoord(cc) && AppendCoord(cr)
+                        && AppendCoord(pc) && AppendCoord(sc);
+
+                if(determine){ // determined will be valid
+
                     bc.disable();
                     cc.disable();
                     cr.disable();
                     pc.disable();
                     sc.disable();
 
+                    // we don't need them hitting save anymore
+                    save.setVisibility(View.INVISIBLE);
+
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }
-                else
+                else if(!valid) // if it's not determined, then it could be invalid?
                 {
-                   spam("All of the boats are don't belong to the board.. Set them up the board !!");
+                    // trash the array list.
+                    al.clear();
+
+                    spam("Error : One or more of the boats is not positioned properly on the board, please reevaluate. ");
+                }
+                else // obviously if it is valid, then it must be indetermined.
+                {
+                    // trash the array list.
+                    al.clear();
+
+                    spam("Error : Invalid boat placement. Boats cannot overlap each other. ");
                 }
 
             }
@@ -113,10 +139,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * Spam and toast go quite well together.
+     * This just sends a toasty message to the user.
+     */
     public void spam(String message)
     {
         Toast t = Toast.makeText(this, message, Toast.LENGTH_SHORT);
         t.show();
     }
+
+
+    /*
+     * This purpose of this function is to gather all the coordinates of the boats
+     * And determine if any boats are overlapping. This is done by converting each coordinate
+     * Into a string pair, like x,y and then it sees if that string is already in the arraylist,
+     * if not it proceeds to add it to there and continues loops.
+     *
+     * If it is there, it'll return false (meaning invalid placement).
+     *
+     */
+    private boolean AppendCoord(BoatCanvas b)
+    {
+        // you have to do boat length, cause I was lazy and did length 5 (carrier) on pairs.
+        for(int i = 0; i < b.boatLength; ++i)
+        {
+            String pair  =  b.pairs[i][0] + "," + b.pairs[i][1];
+
+            if(al.contains(pair)){
+                Log.d("This pair is contained", pair);
+                return false;
+            }
+
+            al.add(pair);
+        }
+
+        return true;
+    }
+
 
 }

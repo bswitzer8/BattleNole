@@ -19,8 +19,8 @@ public class CruiserCanvas extends BoatCanvas {
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.cruiser);
         boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
 
-        this.setX(-140f);
-        this.setY(10f);
+        this.setX(140f);
+        this.setY(85f);
     }
 
     protected void onDraw(Canvas canvas) {

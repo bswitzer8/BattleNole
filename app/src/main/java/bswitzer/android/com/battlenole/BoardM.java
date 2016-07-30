@@ -288,7 +288,6 @@ public class BoardM {
                 break;
         }
         return t1;
-
     }
     // For us in multidimensional array, one off
     public int ReturnIntFromString(String yVal) {
