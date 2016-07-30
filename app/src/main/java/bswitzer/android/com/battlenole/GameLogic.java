@@ -88,10 +88,36 @@ public class GameLogic {
         return counter;
     }
 
+    public String DisplayWinner(ShipM[] ships1, ShipM[] ships2, Player player1, Player player2) {
+
+        String output = "";
+        if (HowManyShipsSunk(ships1) == 5) {
+            output = player1.GetPlayerName() + " Wins!!!";
+            return output;
+        }
+
+        if (HowManyShipsSunk(ships2) == 5) {
+            output = player2.GetPlayerName() + " Wins!!!";
+            return output;
+        }
+
+
+        return output;
+
+    }
+
     public String DisplayPlayerStats(Player player) {
         String output = "";
         output = player.GetPlayerName() + " Wins: " + Integer.toString(player.gamesWon_);
         output += "Losses: " + Integer.toString(player.gamesLost_);
+        return output;
+    }
+
+    public String DisplayShipSunks(ShipM[] ships) {
+        String output = "";
+        for (int i = 0; i < 5; ++i) {
+            output = ships[i].GetShipName() + " ";
+        }
         return output;
     }
 

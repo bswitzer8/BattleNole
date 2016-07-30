@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int shipCount = 5;
 
     // Create Game Logic ---------------------
-    GameLogic gameLogic = new GameLogic(0,1);    // (Usermoves, MaxMoves) Salvo version just increase maxMoves
+    GameLogic gameLogic = new GameLogic(0,1);    // (UserMoves, MaxMoves) Salvo version just increase maxMoves
 
     // ---------------------------------------
 

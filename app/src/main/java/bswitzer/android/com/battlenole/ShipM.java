@@ -96,8 +96,8 @@ public class ShipM {
             case PATROL:
                 return 2;
             case SUB:
-                return 3;
             case DESTROYER:
+                return 3;
             case BATTLESHIP:
                 return 4;
             case CARRIER:

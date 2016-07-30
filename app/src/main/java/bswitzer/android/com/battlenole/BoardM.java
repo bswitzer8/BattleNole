@@ -32,7 +32,6 @@ public class BoardM {
     int              size_;         // used to determine the size of the board
     int              turn_;         // also represents tiles taken as each turn is one tile
     int              maxTurns_;     // maximum amount of turns
-
     String           boardPlayer_;  // name of player who owns this board
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
     private Type[][] boardEnemyDisplay_; // used to display board to enemy
@@ -42,10 +41,10 @@ public class BoardM {
 
     // Constructor
     public BoardM(int size, Player player) {
-        SetSize(size);          // Set Size
-        CreateBoard(size);      // set Board
-        SetTurn(0);             // Set Turn
-        SetMaxTurns(size);      // Set Max Turns
+        SetSize(size);                              // Set Size
+        CreateBoard(size);                          // set Board
+        SetTurn(0);                                 // Set Turn initial value
+        SetMaxTurns(size);                          // Set Max Turns
         this.boardPlayer_ = player.GetPlayerName(); // Set who owns this board player
     }
 
@@ -84,6 +83,7 @@ public class BoardM {
         turn_++;
     }
 
+    // not sure if we need this, but maybe players can take moves back??
     public void DecrementTurn() {
         turn_--;
     }
@@ -288,6 +288,8 @@ public class BoardM {
         Type selection = GetBoard()[xPos][yPos];
         return selection;
     }
+
+
     public boolean CompareBoardPosition(int x, int y, Type t1) {
         if (GetBoard()[x][y] == t1)
             return true;
