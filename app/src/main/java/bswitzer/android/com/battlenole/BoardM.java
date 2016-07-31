@@ -336,6 +336,12 @@ public class BoardM {
                     case CARRIER:
                         output += " C ";
                         break;
+                    case WHITE_MISSILE:
+                        output += " ^ ";
+                        break;
+                    case RED_MISSILE:
+                        output += " * ";
+                        break;
                     default:
                         output += " - ";
                         break;

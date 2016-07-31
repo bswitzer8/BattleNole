@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
         bc.SetBattleShip(shipsPlayer1[3]);
         cc.SetCarrier(shipsPlayer1[4]);
 
+        // I think this works for setting access to the board objects with the canvas
+        // so we can set moves on the canvas such as missiles to the logic part
+        pc.SetBoard1(board1);
+        pc.SetBoard2(board2);
 
 
         save = (Button) findViewById(R.id.save);
@@ -136,6 +140,19 @@ public class MainActivity extends AppCompatActivity {
                     board1.SetShipBoardTile(shipsPlayer1,5);
                     // set that minimap yo.
                     map.setShips(shipsPlayer1);
+
+                    // Attack test, function created below
+                    SetAttack("A0", shipsPlayer1, board1);
+                    SetAttack("A1", shipsPlayer1, board1);
+                    SetAttack("A2", shipsPlayer1, board1);
+                    SetAttack("A3", shipsPlayer1, board1);
+                    SetAttack("A4", shipsPlayer1, board1);
+
+                    // Display ship sunk test
+                    Log.d("Ships Sunk", Integer.toString(gameLogic.HowManyShipsSunk(shipsPlayer1)) );
+
+                    // Display Board After attack
+                    Log.d("BOARD", board1.DebugPrintBoard());
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }
@@ -204,5 +221,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
+    public void SetAttack(String Attack, ShipM[] ships, BoardM board ) {
+        board.SetBoardPosition(Attack, ships);
+    }
 }
