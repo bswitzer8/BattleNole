@@ -21,6 +21,19 @@ import android.widget.ImageView;
 
 public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
+
+    // References to ship objects
+    public ShipM ship_;
+    public ShipM patrol_;
+    public ShipM sub_;
+    public ShipM destroyer_;
+    public ShipM battleship_;
+    public ShipM carrier_;
+
+
+    public BoardM.Type shipType_;
+
+
     // boat art
     public Bitmap boat;
 
@@ -63,6 +76,10 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
         setOnTouchListener(this);
     }
 
+    public String[][] getPairs() {
+        return pairs;
+    }
+
     ///
     /// Prevents the boats from moving.
     ///
@@ -76,6 +93,30 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent event)
     {
         if(!enable) return false;
+
+        ShipM currentShip = null;
+
+        BoardM.Type shipType = shipType_;
+
+        switch (shipType) {
+            case PATROL:
+                currentShip = patrol_;
+                break;
+            case SUB:
+                currentShip = sub_;
+                break;
+            case DESTROYER:
+                currentShip = destroyer_;
+                break;
+            case BATTLESHIP:
+                currentShip = battleship_;
+                break;
+            case CARRIER:
+                currentShip = carrier_;
+                break;
+        }
+
+
 
         /*love you */ long time = System.currentTimeMillis();
 
@@ -108,30 +149,44 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                 // hey let's generate the boat coordinates
 
                 int c = 0;
+                Log.d("Current Ship", currentShip.GetShipName());
                 if(isHorizontal)
                 {
                     int cx = coordinates[0];
 
+                    //currentShip.SetFrontPosition("" + (char)(65 + cx) + coordinates[1] + coordinates[1]);
                     for(int i = cx ; i < cx + boatLength; ++i)
                     {
                         // convert X to Alphabet
                         pairs[c][0] = "" + (char)(65 + i);
-                        pairs[c][1] = "" + coordinates[1];
+                        pairs[c][1] = "" + (coordinates[1]+1);
                         Log.d("coor: ", "(" +  pairs[c][0] + ", " + pairs[c][1] + ")");
+                        if (i == cx)
+                            currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //
+                        else
+                            currentShip.SetBackPosition(pairs[c][0] + pairs[c][1]); // sorry, too lazy to just get the last, will increment through to get last :)
                         ++c;
                     }
+
                 }
                 else
                 {
                     int cy = coordinates[1];
+                    //currentShip.SetFrontPosition("" + (char)(65 + cy) + coordinates[0] + coordinates[1]);
                     for(int i = cy ; i < cy + boatLength; ++i)
                     {
                         pairs[c][0] = "" + (char)(65 + coordinates[0]);
-                        pairs[c][1] = "" + i;
+                        pairs[c][1] = "" + (i+1);
 
                         Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ")");
+
+                        if (i == cy)
+                            currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //
+                        else
+                            currentShip.SetBackPosition(pairs[c][0] + pairs[c][1]); // sorry, too lazy to just get the last, will increment through to get last :)
                         ++c;
                     }
+
                 }
                 break;
         }
@@ -255,5 +310,27 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
             Log.d("coords: ", "(" + pairs[i][0] + ", " + pairs[i][1] + ")");
         }
     }
+
+    public void SetShip(ShipM ship) {
+        ship_ = ship;
+    }
+
+    public void SetPatrol(ShipM ship) {
+        patrol_ = ship;
+    }
+    public void SetSub(ShipM ship) {
+        sub_ = ship;
+    }
+    public void SetDestroyer(ShipM ship) {
+        destroyer_ = ship;
+    }
+    public void SetBattleShip(ShipM ship) {
+        battleship_ = ship;
+    }
+    public void SetCarrier(ShipM ship) {
+        carrier_ = ship;
+    }
+
+
 
 }

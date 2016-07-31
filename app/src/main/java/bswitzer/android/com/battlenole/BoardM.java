@@ -1,5 +1,7 @@
 package bswitzer.android.com.battlenole;
 
+import android.util.Log;
+
 /**
  * Created by marv972228 on 7/21/2016.
 
@@ -17,10 +19,15 @@ package bswitzer.android.com.battlenole;
 public class BoardM {
     // Ben's ENUM type
     public enum Type {
-        BLANK,           // used to indicate open seas
-        WHITE_MISSILE,   // represents a miss by enemy player
-        RED_MISSILE,     // represents a hit by enemy player
-        PLAYER           // represents player ship in tile space
+        BLANK,              // used to indicate open seas
+        WHITE_MISSILE,      // represents a miss by enemy player
+        RED_MISSILE,        // represents a hit by enemy player
+        PLAYER,             // represents player ship in tile space
+        PATROL,             // size 2
+        SUB,                // size 3
+        DESTROYER,          // size 3
+        BATTLESHIP,         // size 4
+        CARRIER             // size 5
     }
 
     // Variables ...................................................................................
@@ -29,29 +36,28 @@ public class BoardM {
     int              maxTurns_;     // maximum amount of turns
     String           boardPlayer_;  // name of player who owns this board
     private Type[][] board_;        // multidimensional array to hold the board values of each tile, initialize it later.
+    private Type[][] boardEnemyDisplay_; // used to display board to enemy
+
+
     // ...........................................................................................*/
 
     // Constructor
     public BoardM(int size, Player player) {
-        // Set Size
-        SetSize(size);
-        // set Board
-        CreateBoard(size);
-        // Set Turn
-        SetTurn(0); // initial value
-        // Set Max Turns
-        SetMaxTurns(size);
-        // Set who owns this board player
-        this.boardPlayer_ = player.GetPlayerName();
+        SetSize(size);                              // Set Size
+        CreateBoard(size);                          // set Board
+        SetTurn(0);                                 // Set Turn initial value
+        SetMaxTurns(size);                          // Set Max Turns
+        this.boardPlayer_ = player.GetPlayerName(); // Set who owns this board player
     }
 
     // Create Board
-    public void CreateBoard(int size) {
+    private void CreateBoard(int size) {
         // Horizontal Values: "A" starts at int value of 0    A - J  = 0 - 9
         // Vertical Values:  "1" starts at in value of 0      1 - 10 = 0 - 9
 
-        board_ = new Type[size][size]; // Create the board
-        SetBoardBlank();               // Make the board Enum Type Blank.
+        board_ = new Type[size][size];             // Create the board
+        boardEnemyDisplay_ = new Type[size][size]; // Display board to enemy
+        SetBoardBlank();                           // Make the board Enum Type Blank.
     }
 
     // SIZE **********************************************
@@ -59,7 +65,7 @@ public class BoardM {
         return size_;
     }
 
-    public void SetSize(int size) {
+    private void SetSize(int size) {
         this.size_ = size;
     }
     // ***************************************************/
@@ -79,6 +85,7 @@ public class BoardM {
         turn_++;
     }
 
+    // not sure if we need this, but maybe players can take moves back??
     public void DecrementTurn() {
         turn_--;
     }
@@ -87,7 +94,7 @@ public class BoardM {
         turn_ = 0;
     }
 
-    public void SetMaxTurns(int size) {
+    private void SetMaxTurns(int size) {
         this.maxTurns_ = size * size;
     }
 
@@ -106,99 +113,64 @@ public class BoardM {
     // BOARD **********************************************
 
     // Get Board
-    public Type[][] GetBoard() {
+    private Type[][] GetBoard() {
         return board_;
     }
 
-    // Set as blank, used for Reset too
+    public void SetBoardByTypePos(int xPos, int yPos, Type selection) {
+        GetBoard()[xPos][yPos] = selection;
+    }
+
+    // Get enemy board
+    private Type[][] GetEnemyBoardDisplay() {
+        return boardEnemyDisplay_;
+    }
+
+    public void SetBoardEnemyByTypePos(int xPos, int yPos, Type selection) {
+        GetEnemyBoardDisplay()[xPos][yPos] = selection;
+    }
+    // Set as blank for both boards, used for Reset too
     public void SetBoardBlank() {
         for (int i = 0; i < GetSize(); ++i) {
             for (int j = 0; j < GetSize(); ++j) {
                 GetBoard()[i][j] = Type.BLANK;
+                GetEnemyBoardDisplay()[i][j] = Type.BLANK;
             }
         }
     }
-
-    // Set Board position, return false if player does not hit, return true if ship is hit
-    // Example: SetBoardPosition("A1"); SetBoardPosition("B2");
-    public boolean SetBoardPosition(String position) {
-
-        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
-        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
-
-        Type selection = GetBoard()[xPos][yPos];
-
-        switch (selection) {
-            case BLANK:                                       // Player selects open seas, miss
-                IncrementTurn();                              // Increment player turn
-                GetBoard()[xPos][yPos] = Type.WHITE_MISSILE;  // Set tile to white missile
-                return false;
-            case WHITE_MISSILE:                               // Player selects already selected space
-            case RED_MISSILE:                                 // Player selects already selected space
-                return false;
-            case PLAYER:                                      // Enemy Player hits this.player's ship.
-                IncrementTurn();                              // Increment player turn
-                GetBoard()[xPos][yPos] = Type.RED_MISSILE;    // set Tile to red missile
-                return true;
-            default:
-                break;
-        }
-
-        return false;
-    }
-
-    public Type GetBoardPositionValue(String position) {
-        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
-        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
-        Type selection = GetBoard()[xPos][yPos];
-        return selection;
-    }
-
-    public boolean CompareBoardPosition(int x, int y, Type t1) {
-        if (GetBoard()[x][y] == t1)
-            return true;
-        return false;
-    }
-
-    // Get Board Full Status, if all are blank, return true
-    public boolean IsBoardFull() {
-        for (int i = 0; i < GetSize(); ++i) {
-            for (int j = 0; j < GetSize(); ++j) {
-                if (GetBoard()[i][j] != Type.BLANK)
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    // No more moves .... most likely will never be reached as most games end before max
-    public boolean IsBoardFullCount() {
-        if (GetTurn() == (GetMaxTurns() - 1)) // I think 99 is 100, since count starts at 0??
-            return true;
-        else
-            return false;
-    }
-
     // Set Ship tile positions. Takes an array of ships and applies their positions on the board
     public void SetShipBoardTile(ShipM[] ship, int shipCount) {
 
+        Log.d("SETSHIPBOARDTILE", "YES");
+
         String fp;
         String bp;
+        Type shipType;
         int FrontOfShipX;
         int FrontOfShipY;
         int BackOfShipX;
         int BackOfShipY;
         int shipLength;
 
+
+
         // Sequence through ship array and set board to player positions
-        for (int i = 0; i < shipCount; ++i ) {
-            shipLength = ship[i].GetShipLength();
+        for (int i = 0; i < 5; ++i ) {
+            shipType = ship[i].GetShipClass();
+            shipLength = ship[i].ReturnSizeOfShip(shipType);
             fp = ship[i].GetFrontPosition();
             bp = ship[i].GetBackPosition();
+
+            Log.d("Shipname", ship[i].GetShipName());
+            Log.d("Front of shipX", ship[i].GetFrontPosition());
+            Log.d("Back of shipX", ship[i].GetBackPosition());
             FrontOfShipX = ReturnIntFromLetter(Character.toString(fp.charAt(0)));
             FrontOfShipY = ReturnIntFromString(Character.toString(fp.charAt(1)));
             BackOfShipX = ReturnIntFromLetter(Character.toString(bp.charAt(0)));
             BackOfShipY = ReturnIntFromString(Character.toString(bp.charAt(1)));
+
+            //Log.d("Front of shipX", "" + (char)(65 + FrontOfShipX));
+            //Log.d("Front of shipY", "" + (char)(65 + FrontOfShipY));
 
             // Horizontal Set ----------------------------------------------------------------------
             // Example A2 - C2, ship of size 3
@@ -206,16 +178,16 @@ public class BoardM {
                 // Front of ship is on left
                 if (FrontOfShipX < BackOfShipX) {
                     for (int j = 0; j < shipLength; ++j) {
-                        GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PLAYER;
-                        IncrementTurn(); // Need to acknowledge space being taken by ships
+                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        IncrementTurn();                                     // Need to acknowledge space being taken by ships
                         ++FrontOfShipX;
                     }
                 }
                 // Front fo ship is on right
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        GetBoard()[BackOfShipX][BackOfShipY] = Type.PLAYER;
-                        IncrementTurn(); // Need to acknowledge space being taken by ships
+                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        IncrementTurn();                                     // Need to acknowledge space being taken by ships
                         ++BackOfShipX;
                     }
                 }
@@ -227,24 +199,161 @@ public class BoardM {
                 // Front of ship is at top and back towards bottom
                 if (FrontOfShipY < BackOfShipY ){
                     for (int j = 0; j < shipLength; ++j) {
-                        GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PLAYER;
+                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
                         IncrementTurn(); // Need to acknowledge space being taken by ships
                         ++FrontOfShipY;
                     }
-
                 }
                 // Front of ship is at bottom and back at top
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        GetBoard()[BackOfShipX][BackOfShipY] = Type.PLAYER;
+                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
                         IncrementTurn(); // Need to acknowledge space being taken by ships
-                        ++BackOfShipY;
+                        ++BackOfShipY; //
                     }
                 }
             }
+
             // *************************************************************************************
+
         }
+
+        Log.d("Board", DebugPrintBoard());
+
     }
+
+    // Set tile to appropriate enum value on board.
+    public void SetTileOfBoard(ShipM ship, int FrontOfShipX, int FrontOfShipY) {
+        Type shipType = ship.GetShipClass();
+        switch(shipType) {
+            case PATROL:
+                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PATROL;
+                break;
+            case SUB:
+                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.SUB;
+                break;
+            case DESTROYER:
+                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.DESTROYER;
+                break;
+            case BATTLESHIP:
+                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.BATTLESHIP;
+                break;
+            case CARRIER:
+                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.CARRIER;
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    // Set Board position of user selection, return false if player does not hit, return true if ship is hit
+    // Example: SetBoardPosition("A1", player1ships); SetBoardPosition("B2", player2ships);
+    // Used for game play action
+    public boolean SetBoardPosition(String position, ShipM[] ships) {
+
+        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
+        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
+        Type selection = GetBoardPositionValue(position);               // get tile value
+
+        switch (selection) {
+            case BLANK:                                                 // Player selects open seas, miss
+                IncrementTurn();                                        // Increment player turn
+                SetBoardByTypePos(xPos, yPos, Type.WHITE_MISSILE);      // Set tile to white missile
+                SetBoardEnemyByTypePos(xPos, yPos, Type.WHITE_MISSILE); // Set tile to white missile
+                return false;
+            case WHITE_MISSILE:                                         // Player selects already selected space
+            case RED_MISSILE:                                           // Player selects already selected space
+                return false;
+
+            // Increase ship count hits, turns, and set tile to red missile
+            case PATROL:
+                UpdateShipTileInfo(ships[0], xPos, yPos);
+                return true;
+            case SUB:
+                UpdateShipTileInfo(ships[1], xPos, yPos);
+                return true;
+            case DESTROYER:
+                UpdateShipTileInfo(ships[2], xPos, yPos);
+                return true;
+            case BATTLESHIP:
+                UpdateShipTileInfo(ships[3], xPos, yPos);
+                return true;
+            case CARRIER:
+                UpdateShipTileInfo(ships[4], xPos, yPos);
+                return true;
+            default:
+                break;
+        }
+
+        return false; // some random tile not set is selected, should not happen
+    }
+
+    public void UpdateShipTileInfo(ShipM ship, int xPos, int yPos) {
+        if (ship.GetAlive())                                    // only update if alive
+            ship.IncrementShipHits();                           // increase the ship count hits
+        ship.SetShipAliveStatus();                              // Check if ship is dead
+        IncrementTurn();                                        // Increment board turn
+        SetBoardByTypePos(xPos, yPos, Type.RED_MISSILE);        // set Tile To red missile
+        SetBoardEnemyByTypePos(xPos, yPos, Type.RED_MISSILE);   // set to red missile
+    }
+
+    public Type GetBoardPositionValue(String position) {
+        int xPos = ReturnIntFromLetter(Character.toString(position.charAt(0)));  // get X position
+        int yPos = ReturnIntFromString(Character.toString(position.charAt(1)));  // get Y Position
+        Type selection = GetBoard()[xPos][yPos];
+        return selection;
+    }
+
+
+    public boolean CompareBoardPosition(int x, int y, Type t1) {
+        if (GetBoard()[x][y] == t1)
+            return true;
+        return false;
+    }
+
+
+    public String DebugPrintBoard() {
+
+        String output = "";
+
+        for (int i = 0; i < 10; ++i ) {
+            for (int j = 0; j < 10; ++j) {
+
+                switch(GetBoard()[j][i]) {
+                    case PATROL:
+                        output += " P ";
+                        break;
+                    case SUB:
+                        output += " S ";
+                        break;
+                    case DESTROYER:
+                        output += " D ";
+                        break;
+                    case BATTLESHIP:
+                        output += " B ";
+                        break;
+                    case CARRIER:
+                        output += " C ";
+                        break;
+                    default:
+                        output += " - ";
+                        break;
+                }
+            }
+                output += "\n";
+        }
+            return output;
+    }
+
+    // No more moves .... most likely will never be reached as most games end before max
+    public boolean IsBoardFullCount() {
+        if (GetTurn() == (GetMaxTurns() - 1)) // I think 99 is 100, since count starts at 0??
+            return true;
+        else
+            return false;
+    }
+
 
     // ADDITIONAL FUNCTIONS **************************
 
