@@ -1,5 +1,7 @@
 package bswitzer.android.com.battlenole;
 
+import android.util.Log;
+
 /**
  * Created by marv972228 on 7/21/2016.
 
@@ -139,6 +141,8 @@ public class BoardM {
     // Set Ship tile positions. Takes an array of ships and applies their positions on the board
     public void SetShipBoardTile(ShipM[] ship, int shipCount) {
 
+        Log.d("SETSHIPBOARDTILE", "YES");
+
         String fp;
         String bp;
         Type shipType;
@@ -148,18 +152,25 @@ public class BoardM {
         int BackOfShipY;
         int shipLength;
 
+
+
         // Sequence through ship array and set board to player positions
-        for (int i = 0; i < shipCount; ++i ) {
+        for (int i = 0; i < 5; ++i ) {
             shipType = ship[i].GetShipClass();
             shipLength = ship[i].ReturnSizeOfShip(shipType);
             fp = ship[i].GetFrontPosition();
             bp = ship[i].GetBackPosition();
 
-
+            Log.d("Shipname", ship[i].GetShipName());
+            Log.d("Front of shipX", ship[i].GetFrontPosition());
+            Log.d("Back of shipX", ship[i].GetBackPosition());
             FrontOfShipX = ReturnIntFromLetter(Character.toString(fp.charAt(0)));
             FrontOfShipY = ReturnIntFromString(Character.toString(fp.charAt(1)));
             BackOfShipX = ReturnIntFromLetter(Character.toString(bp.charAt(0)));
             BackOfShipY = ReturnIntFromString(Character.toString(bp.charAt(1)));
+
+            //Log.d("Front of shipX", "" + (char)(65 + FrontOfShipX));
+            //Log.d("Front of shipY", "" + (char)(65 + FrontOfShipY));
 
             // Horizontal Set ----------------------------------------------------------------------
             // Example A2 - C2, ship of size 3
@@ -198,12 +209,17 @@ public class BoardM {
                     for (int j = 0; j < shipLength; ++j) {
                         SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
                         IncrementTurn(); // Need to acknowledge space being taken by ships
-                        ++BackOfShipY;
+                        ++BackOfShipY; //
                     }
                 }
             }
+
             // *************************************************************************************
+
         }
+
+        Log.d("Board", DebugPrintBoard());
+
     }
 
     // Set tile to appropriate enum value on board.
@@ -296,6 +312,39 @@ public class BoardM {
         return false;
     }
 
+
+    public String DebugPrintBoard() {
+
+        String output = "";
+
+        for (int i = 0; i < 10; ++i ) {
+            for (int j = 0; j < 10; ++j) {
+
+                switch(GetBoard()[j][i]) {
+                    case PATROL:
+                        output += " P ";
+                        break;
+                    case SUB:
+                        output += " S ";
+                        break;
+                    case DESTROYER:
+                        output += " D ";
+                        break;
+                    case BATTLESHIP:
+                        output += " B ";
+                        break;
+                    case CARRIER:
+                        output += " C ";
+                        break;
+                    default:
+                        output += " - ";
+                        break;
+                }
+            }
+                output += "\n";
+        }
+            return output;
+    }
 
     // No more moves .... most likely will never be reached as most games end before max
     public boolean IsBoardFullCount() {

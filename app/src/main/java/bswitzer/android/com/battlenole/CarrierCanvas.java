@@ -11,10 +11,12 @@ import android.util.AttributeSet;
  */
 public class CarrierCanvas extends BoatCanvas {
 
+
     public CarrierCanvas(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         boatLength = 5;
+        shipType_ = BoardM.Type.CARRIER;
 
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.carrier);
         boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
@@ -28,4 +30,6 @@ public class CarrierCanvas extends BoatCanvas {
 
         this.setImageBitmap(boat);
     }
+
+
 }

@@ -14,7 +14,7 @@ public class SubmarineCanvas extends BoatCanvas{
                 super(context, attrs);
 
                 boatLength = 3;
-
+                shipType_ = BoardM.Type.SUB;
                 boat = BitmapFactory.decodeResource(getResources(), R.drawable.submarine);
                 boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
 
@@ -27,4 +27,5 @@ public class SubmarineCanvas extends BoatCanvas{
 
                 this.setImageBitmap(boat);
         }
+
 }

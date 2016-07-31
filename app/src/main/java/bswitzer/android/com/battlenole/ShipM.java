@@ -1,5 +1,7 @@
 package bswitzer.android.com.battlenole;
 
+import android.util.Log;
+
 import java.util.Enumeration;
 
 /**
@@ -60,6 +62,7 @@ public class ShipM {
     }
 
     public void SetFrontPosition(String fp) {
+        Log.d("FP: ", fp);
         this.frontPosition_ = fp;
     }
 
@@ -68,6 +71,7 @@ public class ShipM {
     }
 
     public void SetBackPosition(String bp) {
+        Log.d("BP: ", bp);
         this.backPosition_ = bp;
     }
 

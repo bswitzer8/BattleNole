@@ -15,6 +15,7 @@ public class BattleshipCanvas extends BoatCanvas {
         super(context, attrs);
 
         boatLength = 4;
+        shipType_ = BoardM.Type.BATTLESHIP;
 
         boat = BitmapFactory.decodeResource(getResources(), R.drawable.battleship);
         boat = Bitmap.createScaledBitmap(boat, tileLength, boatLength * tileLength, false);
@@ -29,6 +30,7 @@ public class BattleshipCanvas extends BoatCanvas {
 
         this.setImageBitmap(boat);
     }
+
 
 
 }
