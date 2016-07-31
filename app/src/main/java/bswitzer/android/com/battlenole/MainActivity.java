@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         sc = (SubmarineCanvas)findViewById(R.id.submarine);
 
 
+
         // Set references to ship objects and canvas HERE!!!! woot! ---<--@
         pc.SetPatrol(shipsPlayer1[0]);
         sc.SetSub(shipsPlayer1[1]);
@@ -106,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Set ship positions on board
-                board1.SetShipBoardTile(shipsPlayer1,5);
 
                 // IS THIS VALID? (meaning all the coordinates are proper.
                 boolean valid = bc.valid() && cc.valid() && cr.valid() && pc.valid() && sc.valid();
@@ -118,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(determine){ // determined will be valid
 
+
+
                     bc.disable();
                     cc.disable();
                     cr.disable();
@@ -127,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                     // we don't need them hitting save anymore
                     save.setVisibility(View.INVISIBLE);
                     board.setGameActive(true);
+
+                    // Set ship positions on board
+                    board1.SetShipBoardTile(shipsPlayer1,5);
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }

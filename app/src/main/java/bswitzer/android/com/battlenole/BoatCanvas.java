@@ -19,6 +19,7 @@ import android.widget.ImageView;
  * Created by Ben on 7/23/2016.
  */
 
+
 public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
 
@@ -59,6 +60,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     // neo knows this well
     Matrix matrix = new Matrix();
 
+
     // ms paint
     Paint paint = new Paint();
 
@@ -95,7 +97,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
         ShipM currentShip = null;
 
         BoardM.Type shipType = shipType_;
-
+        // Determine which object is needed to get data from
         switch (shipType) {
             case PATROL:
                 currentShip = patrol_;
@@ -118,6 +120,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
         /*love you */ long time = System.currentTimeMillis();
 
+
         switch(event.getAction())
         {
 
@@ -136,6 +139,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
                 break;
             case MotionEvent.ACTION_UP:
+
                 // double click time stuff
                 lastTime = System.currentTimeMillis();
 
@@ -143,6 +147,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                 // and will need to add some boat repositioning
 
                 // valid check
+
                 if(!valid()) break;
                 // hey let's generate the boat coordinates
 
@@ -157,7 +162,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                     {
                         // convert X to Alphabet
                         pairs[c][0] = "" + (char)(65 + i);
-                        pairs[c][1] = "" + (coordinates[1]+1);
+
                         Log.d("coor: ", "(" +  pairs[c][0] + ", " + pairs[c][1] + ")");
                         if (i == cx)
                             currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //
@@ -174,7 +179,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                     for(int i = cy ; i < cy + boatLength; ++i)
                     {
                         pairs[c][0] = "" + (char)(65 + coordinates[0]);
-                        pairs[c][1] = "" + (i+1);
+
 
                         Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ")");
 
@@ -226,6 +231,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     // and return the corrosponding x,y coordinates.
     private int[] placeOnBoard(float x, float y)
     {
+
         if(!isHorizontal && y < 200) return new int[]{ 0 };
 
         // coordinates
@@ -249,24 +255,31 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
         if(isHorizontal)  // ------
         {
+           
             // x fixes
             if(xy[0] < halfBoat) xy[0] = halfBoat;
+
             if(xy[0] + boatLength > 11) xy[0] = (10 - halfBoat) - (boatLength % 2 == 1 ? 1 : 0);
 
             // y fixes
+
             int yAdjust = boatLength > 3 ? 3 : 4;
             if((xy[1] - yAdjust) < 0) xy[1] = yAdjust;     // srsly what is this
             if((xy[1] - yAdjust) > 9) xy[1] = 9 + yAdjust;
 
+
             newX = ((xy[0] * tileLength) - xOffset);
             newY = (xy[1] * tileLength) - (tileLength/3) - yOffset;
 
+
             // life hacks
             xy[0] -= halfBoat;
+
             xy[1] -= yAdjust;
         }
         else  // vertical |
         {
+           
             // x fixes
             int even = boatLength % 2 == 0 ? 1 : 0;
 
@@ -274,6 +287,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
             if(xy[0] > 9) xy[0] = 9;
 
             // y fixes
+           
             int yAdjust = halfBoat + 4 - (even - 1);
 
             if(xy[1] - yAdjust < 0) xy[1] = yAdjust;     // srsly what is this
@@ -283,6 +297,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
             newY = ((xy[1]) * tileLength) - (tileLength/3) - yOffset;
 
             // life hacks
+
             xy[1] -= yAdjust;
         }
 
@@ -297,6 +312,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     {
         if(coordinates == null || coordinates.length != 2) return false;
 
+
         return coordinates[0] > -1 && coordinates[0] < 10 && coordinates[1] > -1 && coordinates[1] < 10 ;
     }
 
@@ -307,6 +323,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
         {
             Log.d("coords: ", "(" + pairs[i][0] + ", " + pairs[i][1] + ")");
         }
+
     }
 
     public void SetShip(ShipM ship) {
