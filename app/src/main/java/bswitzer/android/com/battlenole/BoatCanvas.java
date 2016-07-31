@@ -31,6 +31,9 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     public ShipM carrier_;
     public BoardM.Type shipType_;
 
+    // Board object refrences
+    public BoardM board1_;
+    public BoardM board2_;
 
     // boat art
     public Bitmap boat;
@@ -327,6 +330,14 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     }
     public void SetCarrier(ShipM ship) {
         carrier_ = ship;
+    }
+
+    public void SetBoard1(BoardM board1) {
+        board1_ = board1;
+    }
+
+    public void SetBoard2(BoardM board2) {
+        board2_ = board2;
     }
 
 
