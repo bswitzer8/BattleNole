@@ -25,8 +25,21 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
     private static Paint paint;
 
+    private boolean gameActive = false;
+
+    private  int x = 0, y = 0;
+
+    private boolean hit = false;
+
+    public int height = 0, width = 0;
+
+    private int[][] hits = new int[10][10];
+
+
     public BoardCanvas( Context context, AttributeSet attrs ) {
         super( context, attrs );
+
+
 
         paint = new Paint();
         paint.setStrokeWidth(10);
@@ -37,14 +50,12 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
     }
 
 
-    int height = 0, width =0;
-    Canvas c;
+
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        c = canvas;
-        // make the dimensions 1/10th of the board.
-        height = this.getMeasuredHeight() / 10;
-        width = this.getMeasuredWidth() / 10;
+
+
         // gap size is 5.
         int gap = 5;
 
@@ -54,54 +65,90 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
         canvas.drawColor(Color.BLACK);
 
-        // just logging things.
-        Log.d("height", "" + height);
-        Log.d("width", "" + width);
+        height = this.getMeasuredHeight() / 10;
+        width = this.getMeasuredWidth() / 10;
 
 
         // prepare for double nested loop to place ocean tiles
-        for(int i = 0; i < 10; ++i)
-            for(int j = 0; j < 10; ++j)
-                canvas.drawBitmap(ocean, (gap / 2 ) + (i * width), 455 + (gap / 2) + (j * width), paint);
+        for (int i = 0; i < 10; ++i)
+            for (int j = 0; j < 10; ++j)
+                canvas.drawBitmap(ocean, (gap / 2) + (i * width), 455 + (gap / 2) + (j * width), paint);
+
+        if(gameActive)
+        {
+
+            int halfSize = width/2;
+            int gapSize = 5/2;
+
+            paint.setStrokeWidth((width-10)/2);
+            for (int i = 0; i < 10; ++i)
+            {
+                for (int j = 0; j < 10; ++j)
+                {
+                    paint.setColor(hits[i][j] == 1 ? Color.RED : Color.WHITE);
+                    if(hits[i][j] != 0)
+                        canvas.drawPoint(gapSize + (i * width) - halfSize, 455 + gapSize + (j * width) - halfSize, paint);
+
+                }
+            }
+
+
+
+            paint.setColor(Color.BLACK);
+            paint.setStrokeWidth(10);
+        }
 
     }
 
 
-    float x = 0.0f, y = 0.0f;
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
+        if(!gameActive) return false;
+
+
+        switch(event.getAction()) {
+
+
+            case MotionEvent.ACTION_UP:
+                    ++x;
+                    ++y;
+
+                    x = (int)(event.getRawX() -5/2 + width/2)/width;
+                    y = (int)((event.getRawY() - 455 - 5/2)/ width);
+
+                    Log.d("x,y", "" + x + ", " + y);
+
+                    if(x >= 0 && x < 10 && y >= 0 && y < 10)
+                    {
+                        hits[x][y] = x % 2 == 0 ? 1 : -1;
+                    }
+
+                    invalidate();
+                break;
+        }
+
 
         return true;
     }
 
- /*
-    private void placeBoat(Canvas c, Bitmap boat, int i, int j, int width, int gap)
+
+    private void placeMissile(boolean h, int i, int j)
     {
-        --i;
-        --j;
 
-        c.drawBitmap(boat, (gap / 2 ) + (i * width), 455 + (gap / 2) + (j * width), paint);
-    }    */
+        hits[i][j] = h ? 1 : -1;
 
-    private void placeMissile(Canvas c, boolean hit, int i, int j, int width, int gap)
+        invalidate();
+    }
+
+
+
+    public void setGameActive(boolean b)
     {
-       // i = (i * 2) - 1;
-       // j = (j * 2) - 1;
-
-        paint.setColor(hit ? Color.RED : Color.WHITE);
-
-        paint.setStrokeWidth((width-10)/2);
-
-        int halfSize = width/2;
-        int gapSize = gap/2;
-
-       // c.drawPoint(gapSize + (i * halfSize), 455 + gapSize + (j * halfSize), paint);
-
-        paint.setColor(Color.BLACK);
-        paint.setStrokeWidth(10);
+        gameActive = b;
     }
 
 

@@ -402,37 +402,42 @@ public class BoardM {
     public int ReturnIntFromString(String yVal) {
         int num;
         switch (yVal) {
-            case "1":
+            case "0":
                 num = 0;
                 break;
-            case "2":
+            case "1":
                 num = 1;
                 break;
-            case "3":
+            case "2":
                 num = 2;
                 break;
-            case "4":
+            case "3":
                 num = 3;
                 break;
-            case "5":
+            case "4":
                 num = 4;
                 break;
-            case "6":
+            case "5":
                 num = 5;
                 break;
-            case "7":
+            case "6":
                 num = 6;
                 break;
-            case "8":
+            case "7":
                 num = 7;
                 break;
-            case "9":
+            case "8":
                 num = 8;
                 break;
-            case "10":
+            case "9":
                 num = 9;
+                break;
+            case "10":
+                num = 10;
+                break;
             default:
                 num = 0;
+                break;
 
         }
 

@@ -9,7 +9,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,7 +19,7 @@ import android.widget.ImageView;
  * Created by Ben on 7/23/2016.
  */
 
-public class BoatCanvas extends ImageView  implements View.OnTouchListener {
+public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
 
     // References to ship objects
@@ -60,8 +59,6 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
     // neo knows this well
     Matrix matrix = new Matrix();
 
-    private   String l = "";         // DELET EME
-
     // ms paint
     Paint paint = new Paint();
 
@@ -98,7 +95,7 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
         ShipM currentShip = null;
 
         BoardM.Type shipType = shipType_;
-
+        // Determine which object is needed to get data from
         switch (shipType) {
             case PATROL:
                 currentShip = patrol_;
@@ -121,9 +118,6 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
 
         /*love you */ long time = System.currentTimeMillis();
 
-
-        float dx = 0, dy = 0;
-
         switch(event.getAction())
         {
 
@@ -142,9 +136,6 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
 
                 break;
             case MotionEvent.ACTION_UP:
-
-               // Log.d("(x,y)", "(" + this.getX() + ", " + this.getY() + ")");
-
                 // double click time stuff
                 lastTime = System.currentTimeMillis();
 
@@ -152,9 +143,8 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
                 // and will need to add some boat repositioning
 
                 // valid check
-                if(coordinates == null || coordinates.length < 2) break;
+                if(!valid()) break;
                 // hey let's generate the boat coordinates
-
 
                 int c = 0;
                 Log.d("Current Ship", currentShip.GetShipName());
@@ -167,7 +157,7 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
                     {
                         // convert X to Alphabet
                         pairs[c][0] = "" + (char)(65 + i);
-                        pairs[c][1] = "" + (coordinates[1]+1);
+                        pairs[c][1] = "" + (coordinates[1]);
                         Log.d("coor: ", "(" +  pairs[c][0] + ", " + pairs[c][1] + ")");
                         if (i == cx)
                             currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //
@@ -184,7 +174,7 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
                     for(int i = cy ; i < cy + boatLength; ++i)
                     {
                         pairs[c][0] = "" + (char)(65 + coordinates[0]);
-                        pairs[c][1] = "" + (i+1);
+                        pairs[c][1] = "" + (i);
 
                         Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ")");
 
@@ -232,14 +222,11 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
 
 
     // (-50.95703, 315.44818) what's this mean?
+    // this function will place the board on the board
+    // and return the corrosponding x,y coordinates.
     private int[] placeOnBoard(float x, float y)
     {
-
-        // Log.d("p(x,y)", "(" + x + ", " + y + ")  boat length = " + (boatLength*tileLength));
-
         if(!isHorizontal && y < 200) return new int[]{ 0 };
-
-        int offset = boatLength % 2 == 0 ? (tileLength/2) : 0;
 
         // coordinates
         int[] xy = new int[]{ 0, 0 };
@@ -249,45 +236,37 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
         float newX;
         float newY;
 
+        // do you know what you're doing (getting x)
+        xy[0] = ((int)(( x ) / (tileLength + (5/2))));
+
+        // get the y value
+        int t = (int)y - this.getHeight() + tileLength;            // don't rock the boat
+        xy[1] = (t / (tileLength + (5/2)));
+
+        // we offset the x if the boat is even length, else offset the y.
+        int xOffset = boatLength % 2 == 0 ? tileLength/2 : 0;
+        int yOffset = xOffset == 0 ? tileLength/2 : 0;
 
         if(isHorizontal)  // ------
         {
-            // do you know what you're doing
-
-            xy[0] = ((int)(( x ) / (tileLength + (5/2))));
-
-            int t = (int)y - this.getHeight() + tileLength;            // don't rock the boat
-
-            xy[1] = (t / (tileLength + (5/2)));
-
             // x fixes
             if(xy[0] < halfBoat) xy[0] = halfBoat;
-            if(xy[0] + boatLength > 11) xy[0] = (10 - (halfBoat)) - (boatLength % 2 == 1 ? 1 : 0);
+            if(xy[0] + boatLength > 11) xy[0] = (10 - halfBoat) - (boatLength % 2 == 1 ? 1 : 0);
 
             // y fixes
-            int lol = boatLength > 3 ? 3 : 4;
-            if((xy[1] - lol) < 0) xy[1] = lol;     // srsly what is this
-            if((xy[1] - lol) > 9) xy[1] = 9 + lol;
+            int yAdjust = boatLength > 3 ? 3 : 4;
+            if((xy[1] - yAdjust) < 0) xy[1] = yAdjust;     // srsly what is this
+            if((xy[1] - yAdjust) > 9) xy[1] = 9 + yAdjust;
 
-            int what = boatLength % 2 == 1 ? tileLength/2 : 0;
-
-            newX = ((xy[0] * tileLength) - offset);
-            newY = ((xy[1]) * tileLength) - (tileLength/3) - what;
+            newX = ((xy[0] * tileLength) - xOffset);
+            newY = (xy[1] * tileLength) - (tileLength/3) - yOffset;
 
             // life hacks
             xy[0] -= halfBoat;
-            xy[1] -= lol;
+            xy[1] -= yAdjust;
         }
         else  // vertical |
         {
-            // do you know what you're doing
-
-            xy[0] = ((int)(( x ) / (tileLength + (5/2))));
-
-            int t = (int)y - this.getHeight() + tileLength;            // don't rock the boat
-
-            xy[1] = (t / (tileLength + (5/2)));
-
             // x fixes
             int even = boatLength % 2 == 0 ? 1 : 0;
 
@@ -295,22 +274,17 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
             if(xy[0] > 9) xy[0] = 9;
 
             // y fixes
-            int ummOkay = halfBoat + 4 - (even -1);
+            int yAdjust = halfBoat + 4 - (even - 1);
 
-            if(xy[1] - ummOkay < 0) xy[1] = ummOkay;     // srsly what is this
-            if((xy[1] - ummOkay) + boatLength > 10) xy[1] = (10 + ummOkay) - boatLength;
+            if(xy[1] - yAdjust < 0) xy[1] = yAdjust;     // srsly what is this
+            if((xy[1] - yAdjust) + boatLength > 10) xy[1] = (10 + yAdjust) - boatLength;
 
-
-            int what = boatLength % 2 == 1 ? tileLength/2 : 0;
-
-            newX = (((xy[0] - (halfBoat)) * tileLength) + offset);
-
-            newY = ((xy[1]) * tileLength) - (tileLength/3) - what;
+            newX = (((xy[0] - halfBoat) * tileLength) + xOffset);
+            newY = ((xy[1]) * tileLength) - (tileLength/3) - yOffset;
 
             // life hacks
-            xy[1] -= ummOkay;
+            xy[1] -= yAdjust;
         }
-
 
         this.setX(newX);
         this.setY(newY);
@@ -323,13 +297,16 @@ public class BoatCanvas extends ImageView  implements View.OnTouchListener {
     {
         if(coordinates == null || coordinates.length != 2) return false;
 
-        Log.d("New boat", " This boat is length " + boatLength);
+        return coordinates[0] > -1 && coordinates[0] < 10 && coordinates[1] > -1 && coordinates[1] < 10 ;
+    }
+
+    public void debug()
+    {
+        Log.d("Boat", " This boat is length " + boatLength);
         for(int i = 0; i < boatLength; ++i)
         {
             Log.d("coords: ", "(" + pairs[i][0] + ", " + pairs[i][1] + ")");
         }
-
-        return coordinates[0] > -1 && coordinates[0] < 10 && coordinates[1] > -1 && coordinates[1] < 10 ;
     }
 
     public void SetShip(ShipM ship) {

@@ -34,6 +34,24 @@ public class MainActivity extends AppCompatActivity {
     // ----------------------------------------
 
 
+
+    // Create Board Objects -------------------
+    // Player 1 Board, Player 2 attacks this board
+    BoardM board1 = new BoardM(boardSize, player1);
+    // Player 2 Board, Player 1 attacks this board
+    BoardM board2 = new BoardM(boardSize, player2);
+
+    // ----------------------------------------
+
+    // Create Ship array
+    // Player 1 Ships
+    ShipM[] shipsPlayer1 = new ShipM[shipCount];
+
+    // Player 2 Ships
+    ShipM[] shipsPlayer2 = new ShipM[shipCount];
+
+    BoardCanvas board;
+
     BattleshipCanvas bc;
     CarrierCanvas cc;
     CruiserCanvas cr;
@@ -82,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
         client.start();
         client.sendMove("Test");
 
+
+        board = (BoardCanvas) findViewById(R.id.board);
+        bc = (BattleshipCanvas) findViewById(R.id.battleship);
+        cc = (CarrierCanvas) findViewById(R.id.carrier);
+        cr = (CruiserCanvas) findViewById(R.id.cruiser);
         pc = (PatrolCanvas) findViewById(R.id.patrol);
         sc = (SubmarineCanvas)findViewById(R.id.submarine);
         cr = (CruiserCanvas) findViewById(R.id.cruiser);
@@ -103,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Set ship positions on board
-                board1.SetShipBoardTile(shipsPlayer1,5);
-
                 // IS THIS VALID? (meaning all the coordinates are proper.
                 boolean valid = bc.valid() && cc.valid() && cr.valid() && pc.valid() && sc.valid();
 
@@ -123,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
 
                     // we don't need them hitting save anymore
                     save.setVisibility(View.INVISIBLE);
+                    board.setGameActive(true);
+
+                    // Set ship positions on board
+                    board1.SetShipBoardTile(shipsPlayer1,5);
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }
