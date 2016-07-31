@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     // Player 2 Ships
     ShipM[] shipsPlayer2 = new ShipM[shipCount];
 
-
+    BoardCanvas board;
     BattleshipCanvas bc;
     CarrierCanvas cc;
     CruiserCanvas cr;
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         client.sendMove("Test");
 
+        board = (BoardCanvas) findViewById(R.id.board);
         bc = (BattleshipCanvas) findViewById(R.id.battleship);
         cc = (CarrierCanvas) findViewById(R.id.carrier);
         cr = (CruiserCanvas) findViewById(R.id.cruiser);
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // we don't need them hitting save anymore
                     save.setVisibility(View.INVISIBLE);
+                    board.setGameActive(true);
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }
