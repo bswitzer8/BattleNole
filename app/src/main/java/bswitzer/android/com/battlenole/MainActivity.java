@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     // ----------------------------------------
 
 
+    BoardCanvas board;
     BattleshipCanvas bc;
     CarrierCanvas cc;
     CruiserCanvas cr;
@@ -85,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         board = (BoardCanvas) findViewById(R.id.board);
         bc = (BattleshipCanvas) findViewById(R.id.battleship);
         cc = (CarrierCanvas) findViewById(R.id.carrier);
+        cr = (CruiserCanvas) findViewById(R.id.cruiser);
+        pc = (PatrolCanvas) findViewById(R.id.patrol);
+        sc = (SubmarineCanvas)findViewById(R.id.submarine);
+
 
         // Set references to ship objects and canvas HERE!!!! woot! ---<--@
         pc.SetPatrol(shipsPlayer1[0]);
