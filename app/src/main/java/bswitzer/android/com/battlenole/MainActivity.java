@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // Set ship positions on board
                 board1.SetShipBoardTile(shipsPlayer1,5);
 
                 // IS THIS VALID? (meaning all the coordinates are proper.

@@ -178,7 +178,7 @@ public class BoardM {
                 // Front of ship is on left
                 if (FrontOfShipX < BackOfShipX) {
                     for (int j = 0; j < shipLength; ++j) {
-                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        SetTileOfBoard(ship[i], FrontOfShipY, FrontOfShipX); // Set tile to ship type
                         IncrementTurn();                                     // Need to acknowledge space being taken by ships
                         ++FrontOfShipX;
                     }
@@ -186,7 +186,7 @@ public class BoardM {
                 // Front fo ship is on right
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        SetTileOfBoard(ship[i], FrontOfShipY, FrontOfShipX); // Set tile to ship type
                         IncrementTurn();                                     // Need to acknowledge space being taken by ships
                         ++BackOfShipX;
                     }
@@ -195,11 +195,11 @@ public class BoardM {
             // -------------------------------------------------------------------------------------
 
             // Vertical Check of Ship towards the bottom *******************************************
-            if (fp.charAt(0) == bp.charAt(1)) {
+            if (fp.charAt(0) == bp.charAt(0)) {
                 // Front of ship is at top and back towards bottom
                 if (FrontOfShipY < BackOfShipY ){
                     for (int j = 0; j < shipLength; ++j) {
-                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        SetTileOfBoard(ship[i], FrontOfShipY, FrontOfShipX); // Set tile to ship type
                         IncrementTurn(); // Need to acknowledge space being taken by ships
                         ++FrontOfShipY;
                     }
@@ -207,7 +207,7 @@ public class BoardM {
                 // Front of ship is at bottom and back at top
                 else {
                     for (int j = 0; j < shipLength; ++j) {
-                        SetTileOfBoard(ship[i], FrontOfShipX, FrontOfShipY); // Set tile to ship type
+                        SetTileOfBoard(ship[i], FrontOfShipY, FrontOfShipX); // Set tile to ship type
                         IncrementTurn(); // Need to acknowledge space being taken by ships
                         ++BackOfShipY; //
                     }
@@ -223,23 +223,23 @@ public class BoardM {
     }
 
     // Set tile to appropriate enum value on board.
-    public void SetTileOfBoard(ShipM ship, int FrontOfShipX, int FrontOfShipY) {
+    public void SetTileOfBoard(ShipM ship, int FrontOfShipY, int FrontOfShipX) {
         Type shipType = ship.GetShipClass();
         switch(shipType) {
             case PATROL:
-                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.PATROL;
+                GetBoard()[FrontOfShipY][FrontOfShipX] = Type.PATROL;
                 break;
             case SUB:
-                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.SUB;
+                GetBoard()[FrontOfShipY][FrontOfShipX] = Type.SUB;
                 break;
             case DESTROYER:
-                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.DESTROYER;
+                GetBoard()[FrontOfShipY][FrontOfShipX] = Type.DESTROYER;
                 break;
             case BATTLESHIP:
-                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.BATTLESHIP;
+                GetBoard()[FrontOfShipY][FrontOfShipX] = Type.BATTLESHIP;
                 break;
             case CARRIER:
-                GetBoard()[FrontOfShipX][FrontOfShipY] = Type.CARRIER;
+                GetBoard()[FrontOfShipY][FrontOfShipX] = Type.CARRIER;
                 break;
             default:
                 break;
@@ -320,7 +320,7 @@ public class BoardM {
         for (int i = 0; i < 10; ++i ) {
             for (int j = 0; j < 10; ++j) {
 
-                switch(GetBoard()[j][i]) {
+                switch(GetBoard()[i][j]) {
                     case PATROL:
                         output += " P ";
                         break;

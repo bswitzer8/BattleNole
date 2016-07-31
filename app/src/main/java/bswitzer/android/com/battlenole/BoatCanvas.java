@@ -29,8 +29,6 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     public ShipM destroyer_;
     public ShipM battleship_;
     public ShipM carrier_;
-
-
     public BoardM.Type shipType_;
 
 
