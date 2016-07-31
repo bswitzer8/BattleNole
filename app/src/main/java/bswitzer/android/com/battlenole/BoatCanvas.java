@@ -81,10 +81,11 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
     }
 
     ///
-    /// Prevents the boats from moving.
+    /// kills the boat from the view and prevents it from moving (we don't want no ghost ships)
     ///
     public void disable()
     {
+        this.setVisibility(INVISIBLE);
         enable = false;
     }
 
@@ -162,6 +163,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                     {
                         // convert X to Alphabet
                         pairs[c][0] = "" + (char)(65 + i);
+                        pairs[c][1] = "" + coordinates[1];
 
                         Log.d("coor: ", "(" +  pairs[c][0] + ", " + pairs[c][1] + ")");
                         if (i == cx)
@@ -179,9 +181,9 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                     for(int i = cy ; i < cy + boatLength; ++i)
                     {
                         pairs[c][0] = "" + (char)(65 + coordinates[0]);
+                        pairs[c][1] = "" + i;
 
-
-                        Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ")");
+                        Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ") is it horizontal? ");
 
                         if (i == cy)
                             currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //
@@ -222,7 +224,6 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
 
         this.setImageBitmap(boat);
     }
-
 
 
 

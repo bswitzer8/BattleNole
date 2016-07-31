@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     BoardCanvas board;
+    MiniMapCanvas map;
     BattleshipCanvas bc;
     CarrierCanvas cc;
     CruiserCanvas cr;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         client.sendMove("Test");
 
         board = (BoardCanvas) findViewById(R.id.board);
+        map = (MiniMapCanvas) findViewById(R.id.minimap);
         bc = (BattleshipCanvas) findViewById(R.id.battleship);
         cc = (CarrierCanvas) findViewById(R.id.carrier);
         cr = (CruiserCanvas) findViewById(R.id.cruiser);
@@ -127,10 +129,13 @@ public class MainActivity extends AppCompatActivity {
 
                     // we don't need them hitting save anymore
                     save.setVisibility(View.INVISIBLE);
+                    map.setVisibility(View.VISIBLE);
                     board.setGameActive(true);
 
                     // Set ship positions on board
                     board1.SetShipBoardTile(shipsPlayer1,5);
+                    // set that minimap yo.
+                    map.setShips(shipsPlayer1);
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }

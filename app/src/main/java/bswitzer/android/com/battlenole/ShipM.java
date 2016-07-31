@@ -53,6 +53,11 @@ public class ShipM {
         return shipName_;
     }
 
+    public int GetLength()
+    {
+        return ReturnSizeOfShip(shipClass_);
+    }
+
     public void SetShipClass(BoardM.Type sc) {
         this.shipClass_ = sc;
     }
@@ -109,6 +114,18 @@ public class ShipM {
             default:
                 return 1;
         }
+    }
+
+
+    public boolean isHorizontal() {
+        if (backPosition_.isEmpty())
+        {
+            Log.d("Error", "backPosition isn't defined");
+            return false;
+        }
+
+        Log.d("Orientation", frontPosition_.substring(0, 1) + " : " + backPosition_.substring(0, 1));
+        return !frontPosition_.substring(0, 1).equals(backPosition_.substring(0, 1));
     }
 
 }
