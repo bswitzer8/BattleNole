@@ -19,9 +19,110 @@ package bswitzer.android.com.battlenole;
  */
 public class GameLogic {
 
-    public GameLogic() {
+    public int userMoves_;
+    public int maxMoves_;
+
+    public GameLogic(int userMoves, int maxMoves) {
+        SetUserMoves(userMoves);
+        SetMaxMoves(maxMoves);
+    }
+
+    public void SetUserMoves(int i) {
+        this.userMoves_ = i;
+    }
+
+    public int GetUserMoves() {
+        return userMoves_;
+    }
+
+    public void SetMaxMoves(int i) {
+        this.maxMoves_ = i;
+    }
+
+    public int GetMaxMoves(){
+        return maxMoves_;
+    }
+
+
+    public void IncrementUserMoves() {
+        userMoves_++;
+    }
+
+    // Use this in combination of set moves to create Salvo version.
+    // return true if all moves are used, false if less are used.
+    public boolean UserMove(String move, BoardM board, ShipM[] ships) {
+
+        if (GetUserMoves() < GetMaxMoves()) {
+            board.SetBoardPosition(move, ships);
+            IncrementUserMoves();
+            return true;
+        }
+        else {
+            SetUserMoves(0);                        // reset user moves to 0
+            return false;
+        }
+    }
+
+    public int HowManyShipsSunk(ShipM[] ships) {
+
+        int counter = 0;
+
+        // Get the amount of ships that are sunk
+        for (int i = 0; i < 5; ++i) {
+            if(!ships[i].GetAlive())
+                ++counter;
+        }
+        return counter;
+    }
+
+    public int HowManyShipsAlive(ShipM[] ships) {
+
+        int counter = 0;
+
+        // get the amount of ships that are alive
+        for (int ben = 0; ben < 5; ++ben) {
+            if (ships[ben].GetAlive()) {
+                ++counter;
+            }
+        }
+        return counter;
+    }
+
+    public String DisplayWinner(ShipM[] ships1, ShipM[] ships2, Player player1, Player player2) {
+
+        String output = "";
+        if (HowManyShipsSunk(ships1) == 5) {
+            output = player1.GetPlayerName() + " Wins!!!";
+            return output;
+        }
+
+        if (HowManyShipsSunk(ships2) == 5) {
+            output = player2.GetPlayerName() + " Wins!!!";
+            return output;
+        }
+
+
+        return output;
 
     }
+
+    public String DisplayPlayerStats(Player player) {
+        String output = "";
+        output = player.GetPlayerName() + " Wins: " + Integer.toString(player.gamesWon_);
+        output += "Losses: " + Integer.toString(player.gamesLost_);
+        return output;
+    }
+
+    public String DisplayShipSunks(ShipM[] ships) {
+        String output = "";
+        for (int i = 0; i < 5; ++i) {
+            output = ships[i].GetShipName() + " ";
+        }
+        return output;
+    }
+
+    /*
+
 
     // #############################################################################################
     // Check if Ship is Sunk
@@ -50,7 +151,7 @@ public class GameLogic {
                         if (!board.CompareBoardPosition(FrontOfShipX, FrontOfShipY, BoardM.Type.RED_MISSILE)) {   //
                             return false; // it is not sunk yet.                                                  //
                         }                                                                                         //
-                        // increment to the right to check rest of ship                                           //
+                        // increment to the right to check rest of ship while the check is red                    //
                         ++FrontOfShipX;                                                                           //
                     }                                                                                             //
                     ship.SetAlive(false); // Set ship to false indicating dead                                    //
@@ -111,7 +212,7 @@ public class GameLogic {
     public boolean IsGroupOfShipsSunk(ShipM[] ships, BoardM board, int shipTotal) {
 
         for (int i = 0; i < shipTotal; ++i) {
-            if(!IsShipSunk(ships[i], board))     // If any ship in gruop not sunk yet, return false
+            if (!IsShipSunk(ships[i], board))     // If any ship in gruop not sunk yet, return false
                 return false;
         }
         return true;                             // All ships sunk
@@ -122,13 +223,11 @@ public class GameLogic {
         int shipsSunk = 0;
 
         for (int i = 0; i < shipTotal; ++i) {
-
-
             // If ship is alive still, check if it is dead
             if (ship[i].GetAlive()) {
                 IsShipSunk(ship[i], board);
             }
-
+            // need separate if statements to check first if a ship is dead, might be...
 
             // Update Ship sunk count
             if (!ship[i].GetAlive()) {          // if ship is dead increment counter
@@ -168,5 +267,9 @@ public class GameLogic {
         // no one wins yet if 0
         return 0;
     }
+*/
+
+
+
 
 }

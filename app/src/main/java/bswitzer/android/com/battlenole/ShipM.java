@@ -1,33 +1,46 @@
 package bswitzer.android.com.battlenole;
 
+import java.util.Enumeration;
+
 /**
  * Created by marv972228 on 7/21/2016.
  */
 public class ShipM {
 
-    private int      shipLength_;
-    private String   shipName_;
-    private String   shipClass_;
-    private String   frontPosition_;
-    private String   backPosition_;
-    private boolean  isAlive_;
-    private String   playerName_;
+    private int         shipHits_;
+    private String      shipName_;
+    private BoardM.Type shipClass_;
+    private String      frontPosition_;
+    private String      backPosition_;
+    private boolean     isAlive_;
+    private String      playerName_;
 
-    public ShipM(int length, String name, String sClass, boolean alive, Player player  ) {
-        SetShipLength(length);   // Create the length of the ship object
-        SetShipName(name);       // Player can name their ships
-        SetShipClass(sClass);    // Ship class can be determined by length
-        SetAlive(alive);         // Determine if ship is alive
-        SetPlayerOfShip(player); // Associate ship to player
+    // Constructor
+    public ShipM(String name, BoardM.Type sClass, BoardM board, Player player  ) {
+        SetShipName(name);              // Player can name their ships
+        SetShipHits(0);                 // initialize to 0
+        SetShipClass(sClass);           // Ship class can be determined by length
+        SetAlive(true);                 // Set to true initially
+        SetPlayerOfShip(player);        // Associate ship to player
     }
 
-
-    public void SetShipLength(int length) {
-        this.shipLength_ = length;
+    public void SetShipHits(int hits) {
+        this.shipHits_ = hits;
     }
 
-    public int GetShipLength() {
-        return shipLength_;
+    public int GetShipHits() {
+        return shipHits_;
+    }
+
+    public void IncrementShipHits () {
+        ++shipHits_;
+    }
+
+    public void SetShipAliveStatus( ) {
+        // if the size of the ship is equal to the hits, it means it's sunk!!!
+        if (ReturnSizeOfShip(GetShipClass()) == GetShipHits()) {
+            SetAlive(false);
+        }
     }
 
     public void SetShipName(String n) {
@@ -38,11 +51,11 @@ public class ShipM {
         return shipName_;
     }
 
-    public void SetShipClass(String sc) {
+    public void SetShipClass(BoardM.Type sc) {
         this.shipClass_ = sc;
     }
 
-    public String GetShipClass() {
+    public BoardM.Type GetShipClass() {
         return shipClass_;
     }
 
@@ -75,6 +88,23 @@ public class ShipM {
 
     public String GetPlayerOfShip() {
         return playerName_;
+    }
+
+    public int ReturnSizeOfShip(BoardM.Type ship) {
+
+        switch (ship) {
+            case PATROL:
+                return 2;
+            case SUB:
+            case DESTROYER:
+                return 3;
+            case BATTLESHIP:
+                return 4;
+            case CARRIER:
+                return 5;
+            default:
+                return 1;
+        }
     }
 
 }

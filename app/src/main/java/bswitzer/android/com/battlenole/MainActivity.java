@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> al = new ArrayList<String>();
 
     // Create Game Logic ---------------------
-    GameLogic gameLogic = new GameLogic();
+    GameLogic gameLogic = new GameLogic(0,1);    // (UserMoves, MaxMoves) Salvo version just increase maxMoves
 
     // ---------------------------------------
 
@@ -125,18 +125,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Create ships here
         // Player 1
-        shipsPlayer1[0] = new ShipM(2, "USS Teddy",   "Boat",       true, player1);
-        shipsPlayer1[1] = new ShipM(3, "USS Anthony", "Sub",        true, player1);
-        shipsPlayer1[2] = new ShipM(4, "USS Bill",    "Destroyer",  true, player1);
-        shipsPlayer1[3] = new ShipM(5, "USS Don",     "BattleShip", true, player1);
-        shipsPlayer1[4] = new ShipM(6, "USS Hillary", "Carrier",    true, player1);
+        shipsPlayer1[0] = new ShipM("USS Teddy",   BoardM.Type.PATROL,       board1, player1);
+        shipsPlayer1[1] = new ShipM("USS Anthony", BoardM.Type.SUB,          board1, player1);
+        shipsPlayer1[2] = new ShipM("USS Bill",    BoardM.Type.DESTROYER,    board1, player1);
+        shipsPlayer1[3] = new ShipM("USS Don",     BoardM.Type.BATTLESHIP,   board1, player1);
+        shipsPlayer1[4] = new ShipM("USS Hillary", BoardM.Type.CARRIER,      board1,  player1);
 
         // Player 2
-        shipsPlayer2[0] = new ShipM(2, "RSS Rummy", "Boat",       true, player2);
-        shipsPlayer2[1] = new ShipM(3, "RSS Aris",  "Sub",        true, player2);
-        shipsPlayer2[2] = new ShipM(4, "RSS Hun",   "Destroyer",  true, player2);
-        shipsPlayer2[3] = new ShipM(5, "RSS Dee",   "BattleShip", true, player2);
-        shipsPlayer2[4] = new ShipM(6, "RSS Yorry", "Carrier",    true, player2);
+        shipsPlayer2[0] = new ShipM("RSS Rummy", BoardM.Type.PATROL,     board2, player2);
+        shipsPlayer2[1] = new ShipM("RSS Aris",  BoardM.Type.SUB,        board2, player2);
+        shipsPlayer2[2] = new ShipM("RSS Hun",   BoardM.Type.DESTROYER,  board2, player2);
+        shipsPlayer2[3] = new ShipM("RSS Dee",   BoardM.Type.BATTLESHIP, board2, player2);
+        shipsPlayer2[4] = new ShipM("RSS Yorry", BoardM.Type.CARRIER,    board2, player2);
 
 
     }
