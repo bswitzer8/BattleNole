@@ -136,23 +136,31 @@ public class MainActivity extends AppCompatActivity {
                     map.setVisibility(View.VISIBLE);
                     board.setGameActive(true);
 
+                    // give access to the Board Canvas to logic objects
+                    board.SetBoardObjects(shipsPlayer1, shipsPlayer2, board1, board2, gameLogic);
+
                     // Set ship positions on board
                     board1.SetShipBoardTile(shipsPlayer1,5);
+
                     // set that minimap yo.
                     map.setShips(shipsPlayer1);
 
+                    // *****************************************************************************
+                    /*
                     // Attack test, function created below
                     SetAttack("A0", shipsPlayer1, board1);
                     SetAttack("A1", shipsPlayer1, board1);
                     SetAttack("A2", shipsPlayer1, board1);
                     SetAttack("A3", shipsPlayer1, board1);
                     SetAttack("A4", shipsPlayer1, board1);
+                    */
 
                     // Display ship sunk test
                     Log.d("Ships Sunk", Integer.toString(gameLogic.HowManyShipsSunk(shipsPlayer1)) );
-
+                    Log.d("Test", gameLogic.DisplayShipSunks(shipsPlayer1));
                     // Display Board After attack
                     Log.d("BOARD", board1.DebugPrintBoard());
+                    // *****************************************************************************
 
                     spam("commence the game !! all your boats are belong to my ?? ");
                 }

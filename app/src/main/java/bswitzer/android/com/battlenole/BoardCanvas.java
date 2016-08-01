@@ -35,6 +35,12 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
     private int[][] hits = new int[10][10];
 
+    private BoardM board1_;
+    private BoardM board2_;
+    private ShipM[] shipPlayer1_;
+    private ShipM[] shipPlayer2_;
+    private GameLogic gameLogic_;
+
 
     public BoardCanvas( Context context, AttributeSet attrs ) {
         super( context, attrs );
@@ -109,6 +115,7 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
     {
         if(!gameActive) return false;
 
+        BoardM.Type tile; // need this for switch case
 
         switch(event.getAction()) {
 
@@ -124,7 +131,25 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
                     if(x >= 0 && x < 10 && y >= 0 && y < 10)
                     {
-                        hits[x][y] = x % 2 == 0 ? 1 : -1;
+
+                        // Determine if ship hit test for hitting your own board *******************
+                        tile = board1_.GetBoard()[x - 1][y - 1]; // reflect the 1 off diff from debug
+
+                        switch (tile) {
+                            case PATROL:
+                            case SUB:
+                            case DESTROYER:
+                            case BATTLESHIP:
+                            case CARRIER:
+                                hits[x][y] = 1;
+                                break;
+                            default:
+                                hits[x][y] = -1;
+                                break;
+                        }
+                        // *************************************************************************
+
+                        //hits[x][y] = x % 2 == 0 ? 1 : -1;
                     }
 
                     invalidate();
@@ -152,4 +177,11 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
     }
 
 
+    public void SetBoardObjects(ShipM[] ship1, ShipM[] ship2, BoardM board1, BoardM board2, GameLogic gameLogic) {
+        board1_ = board1;
+        board2_ = board2;
+        shipPlayer1_ = ship1;
+        shipPlayer2_ = ship2;
+        gameLogic_ = gameLogic;
+    }
 }
