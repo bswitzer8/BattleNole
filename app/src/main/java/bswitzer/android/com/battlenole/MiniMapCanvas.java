@@ -33,9 +33,7 @@ public class MiniMapCanvas extends ImageView  {
 
     private Matrix matrix = new Matrix();
 
-    private int x = 0, y = 0;
-
-    public int height = 0, width = 0;
+    public int width = 0;
 
     private int[][] hits = new int[10][10];
 
@@ -55,7 +53,9 @@ public class MiniMapCanvas extends ImageView  {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // gap size is 5.
+        paint.setStrokeWidth(5);
+
+        // gap size is 2.
         int gap = 2;
 
 
@@ -79,6 +79,26 @@ public class MiniMapCanvas extends ImageView  {
             createBoat(canvas, submarine, R.drawable.submarine, boats[4], width, gap);
         }
 
+        int halfSize = width/2;
+
+        hits[0][0] = 1;
+        hits[1][0] = 1;
+        hits[2][3] = 12;
+        hits[0][1] = 1;
+        hits[2][4] = 12;
+        hits[9][9] = 1;
+        hits[0][9] = 12;
+
+        for(int x = 0; x < hits.length; ++x)
+        {
+            for(int y = 0; y < hits[x].length; y++)
+            {
+                paint.setColor(hits[x][y] == 1 ? Color.RED : Color.WHITE);
+                paint.setStrokeWidth((int)(width*.5));
+                if(hits[x][y] != 0)
+                    canvas.drawPoint(10 + gap + (x * width) + halfSize, 10 + gap + (y * width) + halfSize, paint);
+            }
+        }
     }
 
 
