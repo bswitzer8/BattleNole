@@ -186,7 +186,7 @@ public class BoatCanvas extends ImageView implements View.OnTouchListener {
                         pairs[c][0] = "" + (char)(65 + coordinates[0]);
                         pairs[c][1] = "" + i;
 
-                        Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ") is it horizontal? ");
+                        Log.d("coor: ", "(" + pairs[c][0] + ", " + pairs[c][1] + ") ");
 
                         if (i == cy)
                             currentShip.SetFrontPosition(pairs[c][0] + pairs[c][1]); //

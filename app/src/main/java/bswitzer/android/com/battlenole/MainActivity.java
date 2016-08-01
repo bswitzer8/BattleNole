@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         // Player 2 Board, Player 1 attacks this board
         final BoardM board2 = new BoardM(boardSize, player2);
 
-
-
         // ----------------------------------------
 
         // Create Ship array
@@ -74,12 +72,15 @@ public class MainActivity extends AppCompatActivity {
         shipsPlayer1[3] = new ShipM("USS Don",     BoardM.Type.BATTLESHIP,   board1, player1);
         shipsPlayer1[4] = new ShipM("USS Hillary", BoardM.Type.CARRIER,      board1,  player1);
 
-        // Player 2
+        // Player 2 ( computer)
         shipsPlayer2[0] = new ShipM("RSS Rummy", BoardM.Type.PATROL,     board2, player2);
         shipsPlayer2[1] = new ShipM("RSS Aris",  BoardM.Type.SUB,        board2, player2);
         shipsPlayer2[2] = new ShipM("RSS Hun",   BoardM.Type.DESTROYER,  board2, player2);
         shipsPlayer2[3] = new ShipM("RSS Dee",   BoardM.Type.BATTLESHIP, board2, player2);
         shipsPlayer2[4] = new ShipM("RSS Yorry", BoardM.Type.CARRIER,    board2, player2);
+
+        // place the computer boats:
+        placeComputerBoats(shipsPlayer2);
 
         client.start();
         client.sendMove("Test");
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         cr = (CruiserCanvas) findViewById(R.id.cruiser);
         pc = (PatrolCanvas) findViewById(R.id.patrol);
         sc = (SubmarineCanvas)findViewById(R.id.submarine);
-
 
 
         // Set references to ship objects and canvas HERE!!!! woot! ---<--@
@@ -123,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if(determine){ // determined will be valid
 
-
-
                     bc.disable();
                     cc.disable();
                     cr.disable();
@@ -137,23 +135,24 @@ public class MainActivity extends AppCompatActivity {
                     board.setGameActive(true);
 
                     // give access to the Board Canvas to logic objects
-                    board.SetBoardObjects(shipsPlayer1, shipsPlayer2, board1, board2, gameLogic);
+                    board.SetBoardObjects(shipsPlayer1, shipsPlayer2, board1, board2, gameLogic, map);
 
                     // Set ship positions on board
-                    board1.SetShipBoardTile(shipsPlayer1,5);
+                    board1.SetShipBoardTile(shipsPlayer2,5);
+                    board2.SetShipBoardTile(shipsPlayer1,5);
 
                     // set that minimap yo.
                     map.setShips(shipsPlayer1);
 
                     // *****************************************************************************
-                    /*
+
                     // Attack test, function created below
-                    SetAttack("A0", shipsPlayer1, board1);
+
                     SetAttack("A1", shipsPlayer1, board1);
                     SetAttack("A2", shipsPlayer1, board1);
                     SetAttack("A3", shipsPlayer1, board1);
                     SetAttack("A4", shipsPlayer1, board1);
-                    */
+
 
                     // Display ship sunk test
                     Log.d("Ships Sunk", Integer.toString(gameLogic.HowManyShipsSunk(shipsPlayer1)) );
@@ -181,11 +180,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-        //    2,   3,         4,          5,       6
-        // Boat, Sub, Destroyer, BattleShip, Carrier
-
 
 
 
@@ -231,5 +225,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void SetAttack(String Attack, ShipM[] ships, BoardM board ) {
         board.SetBoardPosition(Attack, ships);
+    }
+
+
+    private void placeComputerBoats(ShipM[] ships)
+    {
+
+        //patrol
+        ships[0].SetFrontPosition("J7");
+        ships[0].SetBackPosition("J8");
+
+        //sub
+        ships[1].SetFrontPosition("B8");
+        ships[1].SetBackPosition("D8");
+
+        // destroyer/cruiser
+        ships[2].SetFrontPosition("J2");
+        ships[2].SetBackPosition("J4");
+
+        // battleship
+        ships[3].SetFrontPosition("E3");
+        ships[3].SetBackPosition("H3");
+
+        // carrier
+        ships[4].SetFrontPosition("B1");
+        ships[4].SetBackPosition("B5");
+
     }
 }

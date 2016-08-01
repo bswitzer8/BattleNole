@@ -1,6 +1,5 @@
 package bswitzer.android.com.battlenole;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,10 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -70,7 +67,7 @@ public class MiniMapCanvas extends ImageView  {
                 canvas.drawBitmap(ocean, 10 + gap + (i * width), 10 + gap + (j * width), paint);
 
         if(boats.length == 5 && boats[0] != null) {
-            Log.d("boat length", "" + boats.length);
+
 
             createBoat(canvas, battleship, R.drawable.battleship, boats[0], width, gap);
             createBoat(canvas, carrier, R.drawable.carrier, boats[1], width, gap);
@@ -81,13 +78,6 @@ public class MiniMapCanvas extends ImageView  {
 
         int halfSize = width/2;
 
-        hits[0][0] = 1;
-        hits[1][0] = 1;
-        hits[2][3] = 12;
-        hits[0][1] = 1;
-        hits[2][4] = 12;
-        hits[9][9] = 1;
-        hits[0][9] = 12;
 
         for(int x = 0; x < hits.length; ++x)
         {
@@ -105,19 +95,46 @@ public class MiniMapCanvas extends ImageView  {
 
     public void createBoat(Canvas canvas, Bitmap boat, int resource, ShipM ship, int width,  int gap)
     {
-        boat = BitmapFactory.decodeResource(getResources(), resource);
-        boat = Bitmap.createScaledBitmap(boat, width - gap*2, (width * ship.GetLength()) - gap*2, false);
 
-        if(ship.isHorizontal())
-        {
+        boat = BitmapFactory.decodeResource(getResources(), resource);
+        boat = Bitmap.createScaledBitmap(boat, width - gap * 2, (width * ship.GetLength()) - gap * 2, false);
+
+        if (ship.isHorizontal()) {
+
             matrix.postRotate(90);
+
+            // hopefully this works. this takes awhile.
 
             // rotate that bitmap
             boat = Bitmap.createBitmap(boat, 0, 0, boat.getWidth(), boat.getHeight(), matrix, true);
+
+            // maybe this will work?
+            boolean change = boat.getHeight() > boat.getWidth();
+
+            // i don't even know. this is dumb but man it has to be done.
+            int attempts = 40;
+            while (change && attempts > 0) {
+                matrix.postRotate(90);
+                boat = Bitmap.createBitmap(boat, 0, 0, boat.getWidth(), boat.getHeight(), matrix, true);
+
+                change = boat.getHeight() > boat.getWidth();
+                --attempts;
+            }
+
+
         }
 
-        int i = (int)ship.GetFrontPosition().charAt(0) - 65; // life hack
+        int i = (int) ship.GetFrontPosition().charAt(0) - 65; // life hack
         int j = Integer.parseInt(ship.GetFrontPosition().substring(1));
+
+        // going to try giving it time to change the bitmaps
+        // i hate to do this, but i need to give the bitmap a little more time to catch up.
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+            Log.d("Exception", "thread didn't sleep");
+        }
+
 
         canvas.drawBitmap(boat, 10 + gap + (i * width), 10 + gap + (j * width), paint);
 
@@ -145,7 +162,18 @@ public class MiniMapCanvas extends ImageView  {
     }
 
 
+    public boolean hit(int x, int y, int hit)
+    {
+        if(x < 0 || x > 9 || y < 0 || y > 9) return false;
 
+        Log.d("comput hit", "(" + x + ", " + y + ")");
+
+
+        hits[x][y] = hit;
+
+        invalidate();
+        return true;
+    }
 
 
 }

@@ -124,8 +124,10 @@ public class ShipM {
             return false;
         }
 
-        Log.d("Orientation", frontPosition_.substring(0, 1) + " : " + backPosition_.substring(0, 1));
-        return !frontPosition_.substring(0, 1).equals(backPosition_.substring(0, 1));
+
+        boolean isIt = !frontPosition_.substring(0, 1).equals(backPosition_.substring(0, 1));
+
+        return isIt;
     }
 
 }

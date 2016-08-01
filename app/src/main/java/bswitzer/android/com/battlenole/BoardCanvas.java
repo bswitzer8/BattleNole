@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import java.util.Random;
+
 /**
  * Created by Ben on 7/20/2016.
  *
@@ -35,12 +37,21 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
     private int[][] hits = new int[10][10];
 
+    private Random brain = new Random();
+
     private BoardM board1_;
     private BoardM board2_;
     private ShipM[] shipPlayer1_;
     private ShipM[] shipPlayer2_;
     private GameLogic gameLogic_;
 
+    private String winner = "";
+    private String winningText = "Player 1 Wins!!";
+    private String winningText2 = "Player 1 Wins!!";
+
+
+    // please don't tell anyone i did this.
+    private MiniMapCanvas minimap = null;
 
     public BoardCanvas( Context context, AttributeSet attrs ) {
         super( context, attrs );
@@ -93,7 +104,7 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
                 {
                     paint.setColor(hits[i][j] == 1 ? Color.RED : Color.WHITE);
                     if(hits[i][j] != 0)
-                        canvas.drawPoint(gapSize + (i * width) - halfSize, 455 + gapSize + (j * width) - halfSize, paint);
+                        canvas.drawPoint(gapSize + ((i+1) * width) - halfSize, (455+width) + gapSize + (j * width) - halfSize, paint);
 
                 }
             }
@@ -102,6 +113,13 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
             paint.setColor(Color.BLACK);
             paint.setStrokeWidth(10);
+        }
+
+        if(!winner.isEmpty())
+        {
+            paint.setColor(Color.BLACK);
+            paint.setTextSize(width);
+            canvas.drawText(winner, this.getMeasuredWidth()/4, this.getMeasuredHeight()/2, paint);
         }
 
     }
@@ -121,19 +139,36 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
 
             case MotionEvent.ACTION_UP:
-                    ++x;
-                    ++y;
 
-                    x = (int)(event.getRawX() -5/2 + width/2)/width;
-                    y = (int)((event.getRawY() - 455 - 5/2)/ width);
 
-                    Log.d("x,y", "" + x + ", " + y);
+                    x = -1;
+                    for(int i = 0; i < this.getWidth()+width; i += width)
+                    {
+                        if(i >= event.getRawX() && event.getRawX() < (i + width))
+                            break;
+
+                        ++x;
+                    }
+
+                    y = -1;
+                    for(int i = 700; i < this.getHeight() + width*1.5; i += width)
+                    {
+                        if(i >= event.getRawY() && event.getRawY() < (i + width))
+                            break;
+
+                        ++y;
+                    }
+
+
+                    //Log.d("x,y", "" + x + ", " + y + " : (" + event.getRawX() + ", " + event.getRawY() + ")");
 
                     if(x >= 0 && x < 10 && y >= 0 && y < 10)
                     {
 
                         // Determine if ship hit test for hitting your own board *******************
-                        tile = board1_.GetBoard()[x - 1][y - 1]; // reflect the 1 off diff from debug
+                        tile = board1_.GetBoard()[x][y];
+
+                        String dumber = (char)(x + 65) + "" + y;
 
                         switch (tile) {
                             case PATROL:
@@ -149,10 +184,70 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
                         }
                         // *************************************************************************
 
-                        //hits[x][y] = x % 2 == 0 ? 1 : -1;
+
                     }
 
-                    invalidate();
+                    boolean keepTrying = false;
+                    do {
+                        int compX = brain.nextInt(9);
+                        int compY = brain.nextInt(9);
+
+                        String dumb = (char)(compX + 65) + "" + compY;
+                        Log.d("test", dumb);
+
+                        tile = board2_.GetBoard()[compX][compY];
+                        switch (tile) {
+                            case WHITE_MISSILE:
+                            case RED_MISSILE:
+                                keepTrying = true;
+                                break;
+                            case PATROL:
+                            case SUB:
+                            case DESTROYER:
+                            case BATTLESHIP:
+                            case CARRIER:
+
+                                minimap.hit(compY, compX, 1);
+                                board2_.SetBoardPosition(dumb, shipPlayer2_);
+
+
+
+
+
+                                break;
+                            default:
+
+                                minimap.hit(compY, compX, -1);
+                                break;
+                        }
+                    } while(keepTrying);
+
+
+                    Log.d("player 1", "boats sank = " + gameLogic_.HowManyShipsSunk(shipPlayer1_));
+                    Log.d("player 2", "boats sank = " + gameLogic_.HowManyShipsSunk(shipPlayer2_));
+
+                    if(gameLogic_.HowManyShipsSunk(shipPlayer1_) == 5  )
+                    {
+                        Log.d("WINNER", "player 1 wins");
+
+                        // game over
+                        winner = winningText;
+                        setEnabled(false);
+
+                    }
+                    if(gameLogic_.HowManyShipsSunk(shipPlayer2_) == 5)
+                    {
+                        Log.d("WINNER", "player 2 wins");
+
+                        // game over
+                        winner = winningText2;
+                        setEnabled(false);
+
+                    }
+
+
+
+                invalidate();
                 break;
         }
 
@@ -163,7 +258,6 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
 
     private void placeMissile(boolean h, int i, int j)
     {
-
         hits[i][j] = h ? 1 : -1;
 
         invalidate();
@@ -177,11 +271,14 @@ public class BoardCanvas extends ImageView implements View.OnTouchListener {
     }
 
 
-    public void SetBoardObjects(ShipM[] ship1, ShipM[] ship2, BoardM board1, BoardM board2, GameLogic gameLogic) {
+    public void SetBoardObjects(ShipM[] ship1, ShipM[] ship2, BoardM board1, BoardM board2, GameLogic gameLogic, MiniMapCanvas mini) {
         board1_ = board1;
         board2_ = board2;
         shipPlayer1_ = ship1;
         shipPlayer2_ = ship2;
         gameLogic_ = gameLogic;
+        minimap = mini;
+
     }
+
 }
