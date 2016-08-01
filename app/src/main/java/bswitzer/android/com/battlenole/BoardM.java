@@ -113,7 +113,7 @@ public class BoardM {
     // BOARD **********************************************
 
     // Get Board
-    private Type[][] GetBoard() {
+    public Type[][] GetBoard() {
         return board_;
     }
 

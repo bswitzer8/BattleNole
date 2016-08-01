@@ -114,9 +114,10 @@ public class GameLogic {
     }
 
     public String DisplayShipSunks(ShipM[] ships) {
-        String output = "";
+        String output = "Ships Sunk: ";
         for (int i = 0; i < 5; ++i) {
-            output = ships[i].GetShipName() + " ";
+            if (!ships[i].GetAlive()) // Get sunk ship names
+                output += ships[i].GetShipName() + " | ";
         }
         return output;
     }
